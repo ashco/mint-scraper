@@ -1,5 +1,6 @@
-const puppeteer = require('puppeteer');
+require('dotenv').config();
 
+const puppeteer = require('puppeteer');
 const Scraper = require('./scripts/scraper');
 
 const scraper = new Scraper();
@@ -14,7 +15,9 @@ const scraper = new Scraper();
   });
   const page = await browser.newPage();
 
-  await page.goto('https://mint.intuit.com/overview.event');
+  await scraper.login(page);
+
+  const dataObj = await scraper.scrapeData(page);
 
 
   // other actions...
