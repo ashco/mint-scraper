@@ -1,0 +1,11 @@
+{
+  "name": "14-mint-scraper",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "AshCo (https://ashco.io)",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^7.0.0",
+    "puppeteer": "^1.14.0"
+  }
+}
