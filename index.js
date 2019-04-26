@@ -1,27 +1,32 @@
-require('dotenv').config();
+import puppeteer from 'puppeteer';
+import Scraper from './libs/scraper';
 
-const puppeteer = require('puppeteer');
-const Scraper = require('./scripts/scraper');
+require('dotenv').config();
 
 const scraper = new Scraper();
 
 (async () => {
-  const browser = await puppeteer.launch({
-    headless: false,
-    // args: [
-    //   `--disable-extensions-except=${pathToExtension}`,
-    //   `--load-extension=${pathToExtension}`
-    // ]
-  });
-  const page = await browser.newPage();
+  try {
+    const browser = await puppeteer.launch({
+      headless: false,
+      // args: [
+      //   `--disable-extensions-except=${pathToExtension}`,
+      //   `--load-extension=${pathToExtension}`
+      // ]
+    });
+    const page = await browser.newPage();
 
-  await scraper.login(page);
+    await scraper.login(page);
 
-  const dataObj = await scraper.scrapeData(page);
-
-
-  // other actions...
+    const dataObj = await scraper.scrapeData(page);
+    console.log(dataObj);
 
 
-  // await browser.close();
+    // other actions...
+
+
+    // await browser.close();
+  } catch (error) {
+    console.error('ERROR:', error);
+  }
 })();

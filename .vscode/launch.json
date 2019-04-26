@@ -9,6 +9,16 @@
       "request": "launch",
       "name": "Launch Program",
       "program": "${workspaceFolder}/index.js"
+      // "args": ["-r", "esm"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch via NPM",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "-r esm"],
+      "port": 9229
     }
   ]
 }

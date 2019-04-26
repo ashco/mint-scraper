@@ -6,6 +6,10 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^7.0.0",
+    "esm": "^3.2.22",
     "puppeteer": "^1.14.0"
+  },
+  "scripts": {
+    "dev": "node -r esm index.js"
   }
 }
