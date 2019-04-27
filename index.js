@@ -1,32 +1,28 @@
-import puppeteer from 'puppeteer';
-import Scraper from './libs/scraper';
+const express = require('express');
+
+const Scraper = require('./libs/scraper');
 
 require('dotenv').config();
 
-const scraper = new Scraper();
+const app = express();
 
-(async () => {
-  try {
-    const browser = await puppeteer.launch({
-      headless: false,
-      // args: [
-      //   `--disable-extensions-except=${pathToExtension}`,
-      //   `--load-extension=${pathToExtension}`
-      // ]
-    });
-    const page = await browser.newPage();
+app.get('/scrape', async (req, res, next) => {
+  console.log('Scraping!!');
 
-    await scraper.login(page);
+  const scraper = new Scraper();
+  const dataObj = await scraper.init();
 
-    const dataObj = await scraper.scrapeData(page);
-    console.log(dataObj);
+  console.log(dataObj);
+
+  res.json(dataObj);
+});
 
 
-    // other actions...
+const port = 5555;
+
+const server = app.listen(port, () => {
+  console.log(`Example App running on port http://localhost:${port}`);
+});
 
 
-    // await browser.close();
-  } catch (error) {
-    console.error('ERROR:', error);
-  }
-})();
+console.log({ server });

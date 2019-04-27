@@ -9,7 +9,6 @@
       "request": "launch",
       "name": "Launch Program",
       "program": "${workspaceFolder}/index.js"
-      // "args": ["-r", "esm"]
     },
     {
       "type": "node",
