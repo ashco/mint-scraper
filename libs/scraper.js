@@ -54,7 +54,8 @@ class Scraper {
         const obj = {};
 
         obj.accountName = account.getElementsByClassName('accountName')[0].innerText;
-        obj.balance = account.getElementsByClassName('balance')[0].innerText;
+        const balance = account.getElementsByClassName('balance')[0].innerText;
+        obj.balance = parseFloat(balance.replace('$', '').replace(',', ''));
         obj.updated = account.getElementsByClassName('last-updated')[0].innerText;
         obj.institution = account.getElementsByClassName('nickname')[0].innerText;
 
@@ -84,7 +85,8 @@ class Scraper {
         const obj = {};
 
         obj.accountName = account.getElementsByClassName('accountName')[0].innerText;
-        obj.balance = account.getElementsByClassName('balance')[0].innerText;
+        const balance = account.getElementsByClassName('balance')[0].innerText;
+        obj.balance = parseFloat(balance.replace('$', '').replace(',', ''));
         obj.updated = account.getElementsByClassName('last-updated')[0].innerText;
         obj.institution = account.getElementsByClassName('nickname')[0].innerText;
 
@@ -113,7 +115,8 @@ class Scraper {
         const obj = {};
 
         obj.accountName = account.getElementsByClassName('accountName')[0].innerText;
-        obj.balance = account.getElementsByClassName('balance')[0].innerText;
+        const balance = account.getElementsByClassName('balance')[0].innerText;
+        obj.balance = parseFloat(balance.replace('$', '').replace(',', ''));
         obj.updated = account.getElementsByClassName('last-updated')[0].innerText;
         obj.institution = account.getElementsByClassName('nickname')[0].innerText;
 
@@ -142,7 +145,8 @@ class Scraper {
         const obj = {};
 
         obj.accountName = account.getElementsByClassName('accountName')[0].innerText;
-        obj.balance = account.getElementsByClassName('balance')[0].innerText;
+        const balance = account.getElementsByClassName('balance')[0].innerText;
+        obj.balance = parseFloat(balance.replace('$', '').replace(',', ''));
         obj.updated = account.getElementsByClassName('last-updated')[0].innerText;
         obj.institution = account.getElementsByClassName('nickname')[0].innerText;
 
@@ -171,7 +175,8 @@ class Scraper {
         const obj = {};
 
         obj.accountName = account.getElementsByClassName('accountName')[0].innerText;
-        obj.balance = account.getElementsByClassName('balance')[0].innerText;
+        const balance = account.getElementsByClassName('balance')[0].innerText;
+        obj.balance = parseFloat(balance.replace('$', '').replace(',', ''));
         obj.updated = account.getElementsByClassName('last-updated')[0].innerText;
         obj.institution = account.getElementsByClassName('nickname')[0].innerText;
 
@@ -191,17 +196,20 @@ class Scraper {
 
   async init() {
     return new Promise(async (resolve, reject) => {
-      console.log(process.env.NODE_ENV);
-      const browser = await puppeteer.launch({
-        headless: process.env.NODE_ENV === 'production',
-      });
-      const page = await browser.newPage();
+      try {
+        const browser = await puppeteer.launch({
+          headless: process.env.NODE_ENV === 'production',
+        });
+        const page = await browser.newPage();
 
-      await this.login(page);
-      const dataObj = await this.getData(page);
+        await this.login(page);
+        const dataObj = await this.getData(page);
 
-      await browser.close();
-      resolve(dataObj);
+        await browser.close();
+        resolve(dataObj);
+      } catch (err) {
+        reject(err);
+      }
     });
   }
 }
