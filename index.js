@@ -17,11 +17,14 @@ app.get('/scrape', async (req, res, next) => {
   res.json(dataObj);
 });
 
+app.get('/data', async (req, res, next) => {
+  const { accountData } = db.value();
+
+  res.json({ accountData });
+});
 
 const port = 5555;
 
 app.listen(port, () => {
   console.log(`Example App running on port http://localhost:${port}`);
 });
-
-
