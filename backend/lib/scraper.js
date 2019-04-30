@@ -9,7 +9,6 @@ class Scraper {
     for (const cookie of cookiesArr) {
       await page.setCookie(cookie);
     }
-    console.log('Cookies loaded!');
   }
 
   async login(page) {
