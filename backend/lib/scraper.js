@@ -27,168 +27,77 @@ class Scraper {
     await page.waitForNavigation({ waitUntil: 'networkidle0' });
   }
 
+  async scrapeData(page, totalEl, accountEl) {
+    const overviewUrl = 'https://mint.intuit.com/overview.event';
 
-  async getData(page) {
-    await page.goto('https://mint.intuit.com/overview.event');
-    await page.waitForSelector('#module-accounts');
+    if (page.url() !== overviewUrl) {
+      await page.goto(overviewUrl);
+      await page.waitForSelector('#module-accounts');
+    }
 
-    const dataObj = {};
+    return page.evaluate((totalEl, accountEl) => {
+      const dataObj = {};
+      dataObj.accounts = [];
 
-    // Scrape Cash
-    dataObj.cash = await page.evaluate(() => {
-      const cashObj = {};
+      dataObj.total = document.querySelector(totalEl).innerText;
 
-      cashObj.accounts = [];
-      cashObj.total = document.querySelector('#moduleAccounts-bank > div > h3 > span.balance').innerText;
-
-      const accountNodes = Array.from(document.querySelector('#moduleAccounts-bank > ul').childNodes);
-
-      // assignAccountData(accountNodes, cashObj);
-
-      accountNodes.forEach((account) => {
-        const obj = {};
-
-        obj.accountName = account.getElementsByClassName('accountName')[0].innerText;
-        const balance = account.getElementsByClassName('balance')[0].innerText;
-        obj.balance = parseFloat(balance.replace('$', '').replace(',', ''));
-        obj.updated = account.getElementsByClassName('last-updated')[0].innerText;
-        obj.institution = account.getElementsByClassName('nickname')[0].innerText;
-
-        const errorMsg = account.getElementsByClassName('error-on-click')[0].innerText;
-        obj.errorMsg = errorMsg === 'Default error message'
-          ? false
-          : errorMsg;
-
-        cashObj.accounts.push(obj);
-      });
-
-      return cashObj;
-    });
-
-    // Credit Cards
-    dataObj.creditCards = await page.evaluate(() => {
-      const creditCardsObj = {};
-      creditCardsObj.accounts = [];
-
-      creditCardsObj.total = document.querySelector('#moduleAccounts-credit > div > h3 > span.balance.negativeBalance').innerText;
-
-      const accountNodes = Array.from(document.querySelector('#moduleAccounts-credit > ul').childNodes);
-
-      // assignAccountData(accountNodes, creditCardsObj);
-
-      accountNodes.forEach((account) => {
-        const obj = {};
-
-        obj.accountName = account.getElementsByClassName('accountName')[0].innerText;
-        const balance = account.getElementsByClassName('balance')[0].innerText;
-        obj.balance = parseFloat(balance.replace('$', '').replace(',', ''));
-        obj.updated = account.getElementsByClassName('last-updated')[0].innerText;
-        obj.institution = account.getElementsByClassName('nickname')[0].innerText;
-
-        const errorMsg = account.getElementsByClassName('error-on-click')[0].innerText;
-        obj.errorMsg = errorMsg === 'Default error message'
-          ? false
-          : errorMsg;
-
-        creditCardsObj.accounts.push(obj);
-      });
-
-      return creditCardsObj;
-    });
-
-    // Loans
-    dataObj.loans = await page.evaluate(() => {
-      const loansObj = {};
-      loansObj.accounts = [];
-
-      loansObj.total = document.querySelector('#moduleAccounts-loan > div > h3 > span.balance.negativeBalance').innerText;
-
-      const accountNodes = Array.from(document.querySelector('#moduleAccounts-loan > ul').childNodes);
+      const accountNodes = Array.from(document.querySelector(accountEl).childNodes);
 
 
       accountNodes.forEach((account) => {
-        const obj = {};
+        const accountObj = {};
 
-        obj.accountName = account.getElementsByClassName('accountName')[0].innerText;
+        accountObj.accountName = account.getElementsByClassName('accountName')[0].innerText;
         const balance = account.getElementsByClassName('balance')[0].innerText;
-        obj.balance = parseFloat(balance.replace('$', '').replace(',', ''));
-        obj.updated = account.getElementsByClassName('last-updated')[0].innerText;
-        obj.institution = account.getElementsByClassName('nickname')[0].innerText;
+        accountObj.balance = parseFloat(balance.replace('$', '').replace(',', ''));
+        accountObj.updated = account.getElementsByClassName('last-updated')[0].innerText;
+        accountObj.institution = account.getElementsByClassName('nickname')[0].innerText;
 
         const errorMsg = account.getElementsByClassName('error-on-click')[0].innerText;
-        obj.errorMsg = errorMsg === 'Default error message'
+        accountObj.errorMsg = errorMsg === 'Default error message'
           ? false
           : errorMsg;
 
-        loansObj.accounts.push(obj);
+        dataObj.accounts.push(accountObj);
       });
 
-      return loansObj;
-    });
+      return dataObj;
+    }, totalEl, accountEl);
+  }
 
-    // Investments
-    dataObj.investments = await page.evaluate(() => {
-      const investmentsObj = {};
-      investmentsObj.accounts = [];
+  async scrapeCashData(page) {
+    const totalEl = '#moduleAccounts-bank > div > h3 > span.balance';
+    const accountEl = '#moduleAccounts-bank > ul';
 
-      investmentsObj.total = document.querySelector('#moduleAccounts-investment > div > h3 > span.balance').innerText;
+    return this.scrapeData(page, totalEl, accountEl);
+  }
 
-      const accountNodes = Array.from(document.querySelector('#moduleAccounts-investment > ul').childNodes);
+  async scrapeCreditCardData(page) {
+    const totalEl = '#moduleAccounts-credit > div > h3 > span.balance.negativeBalance';
+    const accountEl = '#moduleAccounts-credit > ul';
 
+    return this.scrapeData(page, totalEl, accountEl);
+  }
 
-      accountNodes.forEach((account) => {
-        const obj = {};
+  async scrapeLoanData(page) {
+    const totalEl = '#moduleAccounts-loan > div > h3 > span.balance.negativeBalance';
+    const accountEl = '#moduleAccounts-loan > ul';
 
-        obj.accountName = account.getElementsByClassName('accountName')[0].innerText;
-        const balance = account.getElementsByClassName('balance')[0].innerText;
-        obj.balance = parseFloat(balance.replace('$', '').replace(',', ''));
-        obj.updated = account.getElementsByClassName('last-updated')[0].innerText;
-        obj.institution = account.getElementsByClassName('nickname')[0].innerText;
+    return this.scrapeData(page, totalEl, accountEl);
+  }
 
-        const errorMsg = account.getElementsByClassName('error-on-click')[0].innerText;
-        obj.errorMsg = errorMsg === 'Default error message'
-          ? false
-          : errorMsg;
+  async scrapeInvestmentData(page) {
+    const totalEl = '#moduleAccounts-investment > div > h3 > span.balance';
+    const accountEl = '#moduleAccounts-investment > ul';
 
-        investmentsObj.accounts.push(obj);
-      });
+    return this.scrapeData(page, totalEl, accountEl);
+  }
 
-      return investmentsObj;
-    });
+  async scrapePropertyData(page) {
+    const totalEl = '#moduleAccounts-property > div > h3 > span.balance';
+    const accountEl = '#moduleAccounts-property > ul';
 
-    // Property
-    dataObj.property = await page.evaluate(() => {
-      const propertyObj = {};
-      propertyObj.accounts = [];
-
-      propertyObj.total = document.querySelector('#moduleAccounts-property > div > h3 > span.balance').innerText;
-
-      const accountNodes = Array.from(document.querySelector('#moduleAccounts-property > ul').childNodes);
-
-
-      accountNodes.forEach((account) => {
-        const obj = {};
-
-        obj.accountName = account.getElementsByClassName('accountName')[0].innerText;
-        const balance = account.getElementsByClassName('balance')[0].innerText;
-        obj.balance = parseFloat(balance.replace('$', '').replace(',', ''));
-        obj.updated = account.getElementsByClassName('last-updated')[0].innerText;
-        obj.institution = account.getElementsByClassName('nickname')[0].innerText;
-
-        const errorMsg = account.getElementsByClassName('error-on-click')[0].innerText;
-        obj.errorMsg = errorMsg === 'Default error message'
-          ? false
-          : errorMsg;
-
-        propertyObj.accounts.push(obj);
-      });
-
-      return propertyObj;
-    });
-
-    console.log('Data has been scraped!');
-
-    return dataObj;
+    return this.scrapeData(page, totalEl, accountEl);
   }
 
   async run() {
@@ -199,13 +108,22 @@ class Scraper {
           headless: false,
         });
         const page = await browser.newPage();
-
-        // await this.setCookies(page);
         await this.login(page);
-        const dataObj = await this.getData(page);
+
+        const [cashData, creditCardData, loanData, investmentData, propertyData] = await Promise.all([
+          this.scrapeCashData(page),
+          this.scrapeCreditCardData(page),
+          this.scrapeLoanData(page),
+          this.scrapeInvestmentData(page),
+          this.scrapePropertyData(page),
+        ]);
 
         await browser.close();
-        resolve(dataObj);
+
+        console.log('Data Scraped!');
+        resolve({
+          cashData, creditCardData, loanData, investmentData, propertyData,
+        });
       } catch (err) {
         reject(err);
       }
@@ -213,12 +131,38 @@ class Scraper {
   }
 
   async runCron() {
-    const data = await this.run();
+    const {
+      cashData, creditCardData, loanData, investmentData, propertyData,
+    } = await this.run();
 
-    db.get('accountData')
+    db.get('cashData')
       .push({
         date: Date.now(),
-        data,
+        data: cashData,
+      })
+      .write();
+    db.get('creditCardData')
+      .push({
+        date: Date.now(),
+        data: creditCardData,
+      })
+      .write();
+    db.get('loanData')
+      .push({
+        date: Date.now(),
+        data: loanData,
+      })
+      .write();
+    db.get('investmentData')
+      .push({
+        date: Date.now(),
+        data: investmentData,
+      })
+      .write();
+    db.get('propertyData')
+      .push({
+        date: Date.now(),
+        data: propertyData,
       })
       .write();
   }

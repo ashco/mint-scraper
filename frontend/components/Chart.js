@@ -8,7 +8,7 @@ import { distanceInWords } from 'date-fns';
 export default class Chart extends PureComponent {
   render() {
     const { scrapes } = this.props;
-    const scrapesWithDates = scrapes.accountData.map(scrape => ({ ...scrape, date: distanceInWords(new Date(scrape.date), new Date()) }));
+    const scrapesWithDates = scrapes.map(scrape => ({ ...scrape, date: distanceInWords(new Date(scrape.date), new Date()) }));
 
     return (
       <LineChart

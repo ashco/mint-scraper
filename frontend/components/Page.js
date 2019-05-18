@@ -12,7 +12,6 @@ function useScrapes() {
   async function fetchScrapes() {
     const res = await fetch('http://localhost:5555/data');
     const data = await res.json();
-    console.log('working', data);
     setScrapes(data);
   }
 

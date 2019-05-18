@@ -8,11 +8,13 @@ import Chart from './Chart';
 export default function Data() {
   const { scrapes, fetchScrapes } = useContext(ScrapeContext);
   // return <div>wrk</div>;
+  console.log(scrapes);
+  // return <p>working yo</p>;
   return (
     <div>
-      <Chart scrapes={scrapes} />
+      {/* <Chart scrapes={scrapes} /> */}
       <h2>Your Account Data:</h2>
-      <Table scrapes={scrapes} />
+      {/* <Table scrapes={scrapes.cashData} /> */}
       <ul />
     </div>
   );
