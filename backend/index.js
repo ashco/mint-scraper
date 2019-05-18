@@ -38,7 +38,6 @@ app.get('/data', async (req, res) => {
   const uniqueInvestmentData = uniqueCount(investmentData);
   const uniquePropertyData = uniqueCount(propertyData);
 
-  console.log(cashData, uniqueCashData);
 
   // res.json({
   //   cashData, creditCardData, loanData, investmentData, propertyData,

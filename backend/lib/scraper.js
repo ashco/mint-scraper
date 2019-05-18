@@ -1,6 +1,8 @@
 ﻿/* eslint-disable class-methods-use-this */
 const puppeteer = require('puppeteer');
+const numeral = require('numeral');
 const db = require('./db');
+
 
 const cookiesArr = require('../cookies.json');
 
@@ -15,6 +17,7 @@ class Scraper {
   async login(page) {
     await page.goto('https://mint.intuit.com/overview.event');
     await page.waitForSelector('#ius-userid');
+
     await page.waitFor(1500);
 
     const usernameInput = await page.$('#ius-userid');
@@ -35,11 +38,13 @@ class Scraper {
       await page.waitForSelector('#module-accounts');
     }
 
-    return page.evaluate((totalEl, accountEl) => {
+    return page.evaluate(async (totalEl, accountEl) => {
       const dataObj = {};
       dataObj.accounts = [];
 
-      dataObj.total = document.querySelector(totalEl).innerText;
+      const totalText = document.querySelector(totalEl).innerText;
+      // Convert to number
+      dataObj.total = await window.convertNum(totalText);
 
       const accountNodes = Array.from(document.querySelector(accountEl).childNodes);
 
@@ -108,6 +113,9 @@ class Scraper {
           headless: false,
         });
         const page = await browser.newPage();
+        await page.setDefaultTimeout(300000); // 5 minutes
+        await page.exposeFunction('convertNum', text => numeral(text).value());
+
         await this.login(page);
 
         const [cashData, creditCardData, loanData, investmentData, propertyData] = await Promise.all([
