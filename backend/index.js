@@ -30,6 +30,7 @@ app.get('/data', async (req, res) => {
   const {
     cashData, creditCardData, loanData, investmentData, propertyData,
   } = db.value();
+
   // filter for only unique values
   const uniqueCashData = uniqueCount(cashData);
   const uniqueCreditCardData = uniqueCount(creditCardData);
@@ -37,12 +38,14 @@ app.get('/data', async (req, res) => {
   const uniqueInvestmentData = uniqueCount(investmentData);
   const uniquePropertyData = uniqueCount(propertyData);
 
-  res.json({
-    cashData, creditCardData, loanData, investmentData, propertyData,
-  });
+  console.log(cashData, uniqueCashData);
+
   // res.json({
-  //   cashData: uniqueCashData, creditCardData: uniqueCreditCardData, loanData: uniqueLoanData, investmentData: uniqueInvestmentData, propertyData: uniquePropertyData,
+  //   cashData, creditCardData, loanData, investmentData, propertyData,
   // });
+  res.json({
+    cashData: uniqueCashData, creditCardData: uniqueCreditCardData, loanData: uniqueLoanData, investmentData: uniqueInvestmentData, propertyData: uniquePropertyData,
+  });
 });
 
 const port = 5555;

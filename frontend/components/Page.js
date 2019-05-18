@@ -6,7 +6,7 @@ import { ScrapeProvider } from './ScrapeContext';
 function useScrapes() {
   // Initial State inside hook
   const [scrapes, setScrapes] = useState({
-    accountData: [],
+    cashData: [], creditCardData: [], loanData: [], investmentData: [], propertyData: [],
   });
   // fetch function
   async function fetchScrapes() {
