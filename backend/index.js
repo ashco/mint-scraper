@@ -1,12 +1,17 @@
 const express = require('express');
 
+const cors = require('cors');
 const Scraper = require('./lib/scraper');
 const db = require('./lib/db');
+
+const { uniqueCount } = require('./lib/utils');
 
 require('dotenv').config();
 require('./lib/cron');
 
+
 const app = express();
+app.use(cors());
 
 app.get('/scrape', async (req, res, next) => {
   console.log('Scraping!!');
@@ -19,8 +24,11 @@ app.get('/scrape', async (req, res, next) => {
 
 app.get('/data', async (req, res, next) => {
   const { accountData } = db.value();
+  // filter for only unique values
+  const uniqueData = uniqueCount(accountData);
+  console.log(uniqueData);
 
-  res.json({ accountData });
+  res.json({ accountData: uniqueData });
 });
 
 const port = 5555;

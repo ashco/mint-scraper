@@ -1,33 +1,31 @@
 ﻿import { useEffect, useState } from 'react';
 
-// import { ScrapeProvider } from './ScrapeContext';
+import { ScrapeProvider } from './ScrapeContext';
 
 // Custom Hook!
-// function useScrapes() {
-//   // Intial State inside our hook
-//   const [scrapes, setScrapes] = useState({
-//     twitter: [],
-//     instagram: [],
-//   });
-//   // fetch function
-//   async function fetchScrapes() {
-//     const res = await fetch(`http://localhost:2093/aggregate`);
-//     const data = await res.json();
-//     setScrapes(data);
-//   }
-//   // didMount/Did Update
-//   useEffect(() => {
-//     fetchScrapes();
-//   }, []);
-//   return { scrapes, fetchScrapes };
-// }
+function useScrapes() {
+  // Initial State inside hook
+  const [scrapes, setScrapes] = useState({
+    accountData: [],
+  });
+
+  useEffect(() => {
+    (async () => {
+      console.log('Mounting or Updating');
+      const res = await fetch('http://localhost:5555/data');
+      const data = await res.json();
+      setScrapes(data);
+    })();
+  }, []);
+
+  return scrapes;
+}
 
 export default function Page({ children }) {
-  // const hookInfo = useScrapes();
+  const scrapes = useScrapes();
   return (
-    <div>hi</div>
-    // <ScrapeProvider value={hookInfo}>
-    //   <div className="page">{children}</div>
-    // </ScrapeProvider>
+    <ScrapeProvider value={scrapes}>
+      <div className="page">{children}</div>
+    </ScrapeProvider>
   );
 }

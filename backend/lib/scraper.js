@@ -6,14 +6,16 @@ const cookiesArr = require('../cookies.json');
 
 class Scraper {
   async setCookies(page) {
+    console.log('🍪 Setting Cookies');
     for (const cookie of cookiesArr) {
       await page.setCookie(cookie);
     }
   }
 
   async login(page) {
-    await page.goto('https://accounts.intuit.com/index.html');
+    await page.goto('https://mint.intuit.com/overview.event');
     await page.waitForSelector('#ius-userid');
+    await page.waitFor(1500);
 
     const usernameInput = await page.$('#ius-userid');
     const passwordInput = await page.$('#ius-password');
@@ -22,6 +24,7 @@ class Scraper {
     await usernameInput.type(process.env.LOGINUSER);
     await passwordInput.type(process.env.LOGINPASS);
     await loginBtn.click();
+    await page.waitForNavigation({ waitUntil: 'networkidle0' });
   }
 
 
@@ -32,7 +35,7 @@ class Scraper {
     const dataObj = {};
 
     // Scrape Cash
-    dataObj.cash = await page.evaluate((assignAccountData) => {
+    dataObj.cash = await page.evaluate(() => {
       const cashObj = {};
 
       cashObj.accounts = [];
@@ -60,10 +63,10 @@ class Scraper {
       });
 
       return cashObj;
-    }, this.assignAccountData);
+    });
 
     // Credit Cards
-    dataObj.creditCards = await page.evaluate((assignAccountData) => {
+    dataObj.creditCards = await page.evaluate(() => {
       const creditCardsObj = {};
       creditCardsObj.accounts = [];
 
@@ -91,7 +94,7 @@ class Scraper {
       });
 
       return creditCardsObj;
-    }, this.assignAccountData);
+    });
 
     // Loans
     dataObj.loans = await page.evaluate(() => {
@@ -183,6 +186,8 @@ class Scraper {
       return propertyObj;
     });
 
+    console.log('Data has been scraped!');
+
     return dataObj;
   }
 
@@ -191,12 +196,12 @@ class Scraper {
       try {
         const browser = await puppeteer.launch({
           // headless: process.env.NODE_ENV === 'production',
-          headless: true,
+          headless: false,
         });
         const page = await browser.newPage();
 
-        await this.setCookies(page);
-        // await this.login(page);
+        // await this.setCookies(page);
+        await this.login(page);
         const dataObj = await this.getData(page);
 
         await browser.close();
@@ -216,8 +221,6 @@ class Scraper {
         data,
       })
       .write();
-
-    console.log('Data has been scraped!');
   }
 }
 

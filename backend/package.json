@@ -5,8 +5,8 @@
   "author": "AshCo (https://ashco.io)",
   "license": "MIT",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^7.0.0",
-    "esm": "^3.2.22",
     "express": "^4.16.4",
     "lowdb": "^1.0.0",
     "node-cron": "^2.0.3",
