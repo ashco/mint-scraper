@@ -1,7 +1,9 @@
 ﻿import { distanceInWords } from 'date-fns';
 
 export default function Table({ scrapes }) {
-  const scrapesReversed = [...scrapes].reverse(); // prevents mutating data
+  const { accountData } = scrapes;
+
+  const scrapesReversed = [...accountData].reverse(); // prevents mutating data
 
   return (
     <table>
