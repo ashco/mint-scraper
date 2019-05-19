@@ -4,17 +4,8 @@ const numeral = require('numeral');
 const db = require('./db');
 
 
-const cookiesArr = require('../cookies.json');
-
 class Scraper {
-  async setCookies(page) {
-    console.log('🍪 Setting Cookies');
-    for (const cookie of cookiesArr) {
-      await page.setCookie(cookie);
-    }
-  }
-
-  async login(page) {
+  async loginFill(page) {
     await page.goto('https://mint.intuit.com/overview.event');
     await page.waitForSelector('#ius-userid');
 
@@ -22,12 +13,71 @@ class Scraper {
 
     const usernameInput = await page.$('#ius-userid');
     const passwordInput = await page.$('#ius-password');
-    const loginBtn = await page.$('#ius-sign-in-submit-btn');
 
     await usernameInput.type(process.env.LOGINUSER);
     await passwordInput.type(process.env.LOGINPASS);
+  }
+
+  async login(page) {
+    await this.loginFill(page);
+
+    const loginBtn = await page.$('#ius-sign-in-submit-btn');
     await loginBtn.click();
-    await page.waitForNavigation({ waitUntil: 'networkidle0' });
+    await page.waitForNavigation({ waitUntil: 'networkidle0' }).catch(async () => {
+      // if timeout occurs it could be because MFA screen shows up
+      if (await page.$('#ius-mfa-wrapper') !== null) {
+        throw Error('MFA has been requested. Please authenticate.');
+      } else {
+        throw Error('Login failed, but MFA seems to be fine..');
+      }
+    });
+  }
+
+  async authReq(page) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await page.setDefaultTimeout(300000); // 5 minutes
+
+        await this.loginFill(page);
+        const loginBtn = await page.$('#ius-sign-in-submit-btn');
+        await loginBtn.click();
+
+        await page.waitFor(1000);
+        // confirm that MFA needs to happen
+        if (await page.$('#ius-mfa-option-sms') === null) {
+          throw Error('Error! ..but Success! It appears that you do not need to authenticate.');
+        }
+        // Select receive sms
+        await page.$eval('#ius-mfa-option-sms', el => el.checked = true);
+        // Request SMS
+        const reqBtn = await page.$('#ius-mfa-options-submit-btn');
+        await reqBtn.click();
+
+        console.log('Authentication SMS code requested.');
+        resolve();
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  async authSend(page, authCode) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        // Fill form
+        await page.$eval('#ius-mfa-confirm-code', (el, code) => {el.value = code}, authCode);
+        const imgEl = await page.$('#ius-mfa-otp-for-sms-header > div');
+        await page.waitFor(1000)
+        await imgEl.click();
+        await page.waitFor(1000)
+        // Click btn
+        const authBtn = await page.$('#ius-mfa-otp-submit-btn');
+        await authBtn.click();
+        resolve();
+      } catch (err) {
+        reject(err);
+      }
+    });
   }
 
   async scrapeData(page, totalEl, accountEl) {
@@ -105,15 +155,23 @@ class Scraper {
     return this.scrapeData(page, totalEl, accountEl);
   }
 
+  async getGlobalPackage() {
+    const browser = await puppeteer.launch({
+      headless: process.env.NODE_ENV === 'production',
+    });
+    const page = await browser.newPage();
+
+    return {browser, page};
+  }
+
   async run() {
     return new Promise(async (resolve, reject) => {
       try {
         const browser = await puppeteer.launch({
-          // headless: process.env.NODE_ENV === 'production',
-          headless: false,
+          headless: process.env.NODE_ENV === 'production',
         });
         const page = await browser.newPage();
-        await page.setDefaultTimeout(300000); // 5 minutes
+        // await page.setDefaultTimeout(300000); // 5 minutes
         await page.exposeFunction('convertNum', text => numeral(text).value());
 
         await this.login(page);
@@ -138,41 +196,56 @@ class Scraper {
     });
   }
 
-  async runCron() {
-    const {
-      cashData, creditCardData, loanData, investmentData, propertyData,
-    } = await this.run();
 
-    db.get('cashData')
-      .push({
-        date: Date.now(),
-        data: cashData,
+  async runCron() {
+    let cashData;
+    let creditCardData;
+    let loanData;
+    let investmentData;
+    let propertyData;
+
+    await this.run()
+      .then((res) => {
+        cashData = res.cashData;
+        creditCardData = res.creditCardData;
+        loanData = res.loanData;
+        investmentData = res.investmentData;
+        propertyData = res.propertyData;
+
+        db.get('cashData')
+          .push({
+            date: Date.now(),
+            data: cashData,
+          })
+          .write();
+        db.get('creditCardData')
+          .push({
+            date: Date.now(),
+            data: creditCardData,
+          })
+          .write();
+        db.get('loanData')
+          .push({
+            date: Date.now(),
+            data: loanData,
+          })
+          .write();
+        db.get('investmentData')
+          .push({
+            date: Date.now(),
+            data: investmentData,
+          })
+          .write();
+        db.get('propertyData')
+          .push({
+            date: Date.now(),
+            data: propertyData,
+          })
+          .write();
       })
-      .write();
-    db.get('creditCardData')
-      .push({
-        date: Date.now(),
-        data: creditCardData,
-      })
-      .write();
-    db.get('loanData')
-      .push({
-        date: Date.now(),
-        data: loanData,
-      })
-      .write();
-    db.get('investmentData')
-      .push({
-        date: Date.now(),
-        data: investmentData,
-      })
-      .write();
-    db.get('propertyData')
-      .push({
-        date: Date.now(),
-        data: propertyData,
-      })
-      .write();
+      .catch((err) => {
+        console.error(err);
+      });
   }
 }
 
