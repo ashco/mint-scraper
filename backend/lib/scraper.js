@@ -45,7 +45,7 @@ class Scraper {
         await page.waitFor(1000);
         // confirm that MFA needs to happen
         if (await page.$('#ius-mfa-option-sms') === null) {
-          throw Error('Error! ..but Success! It appears that you do not need to authenticate.');
+          throw Error('Error! ..but also Success! It appears that you do not need to authenticate.');
         }
         // Select receive sms
         await page.$eval('#ius-mfa-option-sms', el => el.checked = true);

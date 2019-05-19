@@ -61,26 +61,20 @@ app.get('/data', async (req, res) => {
   });
 });
 
-app.post('/auth-req', async (req, res) => {
-  console.log('Authentication train! Choo Choo!');
+app.post('/auth-req', async (req, res, next) => {
+  console.log('Auth initializing.');
 
   try {
     const globalPackage = await scraper.getGlobalPackage();
     globalPage = globalPackage.page;
     globalBrowser = globalPackage.browser;
     await scraper.authReq(globalPage);
+    res.status(200).send();
   } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
+    console.log('Auth error. Auth may not be necessary.')
+    res.status(250).send('You are authenticated.');
     await globalBrowser.close();
   }
-
-  // try {
-  //   scraper.auth();
-  // } catch (err) {
-  //   console.error(err);
-  // }
-
 
 });
 
@@ -89,20 +83,13 @@ app.post('/auth-send', async (req, res) => {
 
   try {
     await scraper.authSend(globalPage, authCode);
-    console.log('Authentication successful!');
-    res.status(200).json('SUCCESS! Your request to authenticate went swimmingly.');
+    console.log('Auth successful!');
+    res.status(200).send('SUCCESS! Your auth request went swimmingly.');
   } catch (err) {
     console.error(err);
-    res.status(500).send('Shoot! Something went wrong while trying to set the authentication code.');
+    res.status(500).send(err.message);
   }
   await globalBrowser.close();
-  // try {
-  //   scraper.auth();
-  // } catch (err) {
-  //   console.error(err);
-  // }
-
-
 });
 
 // app.post('/sms', (req, res) => {
