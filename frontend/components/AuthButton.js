@@ -3,27 +3,28 @@ import React from 'react';
 
 export default class AuthButton extends React.Component {
   async handleClick() {
-    // Kick off auth process, trigger sms to send
-    fetch('http://localhost:5555/auth-req', {
+    const res1 = await fetch('http://localhost:5555/auth-req', {
       method: 'POST',
-    })
-      .catch((err) => {
-        console.log('THE ERROR YO');
-        alert(err);
+    });
+
+    if (res1.status === 250) {
+      const message1 = await res1.text();
+      alert(message1);
+    } else {
+      // collect sms
+      const authCode = prompt('Please provide the 6-digit auth code.');
+      // send code for auth
+      const res2 = await fetch('http://localhost:5555/auth-send', {
+        method: 'POST',
+        body: JSON.stringify({ authCode }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
-    // collect sms
-    const authCode = prompt('Please provide the 6-digit authentication code.');
-    // send code for auth
-    await fetch('http://localhost:5555/auth-send', {
-      method: 'POST',
-      body: JSON.stringify({ authCode }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .catch((err) => {
-        alert(err);
-      });
+
+      const message2 = await res2.text();
+      alert(message2);
+    }
   }
 
   render() {

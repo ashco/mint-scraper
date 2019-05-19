@@ -10,8 +10,6 @@ export default class Chart extends PureComponent {
     const { scrapes, color } = this.props;
     const scrapesWithDates = scrapes.map(scrape => ({ ...scrape, date: distanceInWords(new Date(scrape.date), new Date()) }));
 
-    console.log(scrapesWithDates);
-
     return (
       <LineChart
         width={800}
@@ -25,7 +23,7 @@ export default class Chart extends PureComponent {
         <XAxis dataKey="date" />
         <YAxis />
         <Tooltip />
-        <Legend />
+        {/* <Legend /> */}
         <Line type="monotone" dataKey="data.total" stroke={color} activeDot={{ r: 8 }} />
       </LineChart>
     );

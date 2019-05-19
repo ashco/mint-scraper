@@ -5,7 +5,7 @@ import AuthButton from '../components/AuthButton';
 export default function Home() {
   return (
     <Page>
-      <h2>Home Page</h2>
+      <h2>Wealth Tracker</h2>
       <AuthButton />
       <Data />
     </Page>
