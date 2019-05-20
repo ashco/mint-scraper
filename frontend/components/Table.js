@@ -1,7 +1,6 @@
 ﻿import React from 'react';
 import { distanceInWords } from 'date-fns';
 
-
 export default function Table({ scrapes, title }) {
   // const scrapesReversed = [...scrapes].reverse(); // prevents mutating data
   return (

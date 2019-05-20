@@ -6,7 +6,11 @@ import { ScrapeProvider } from './ScrapeContext';
 function useScrapes() {
   // Initial State inside hook
   const [scrapes, setScrapes] = useState({
-    cashData: [], creditCardData: [], loanData: [], investmentData: [], propertyData: [],
+    cashData: [],
+    creditCardData: [],
+    loanData: [],
+    investmentData: [],
+    propertyData: [],
   });
   // fetch function
   async function fetchScrapes() {
@@ -19,7 +23,6 @@ function useScrapes() {
   useEffect(() => {
     fetchScrapes();
   }, []);
-
 
   return { scrapes, fetchScrapes };
 }

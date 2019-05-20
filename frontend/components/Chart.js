@@ -23,7 +23,6 @@ export default class Chart extends PureComponent {
         <XAxis dataKey="date" />
         <YAxis />
         <Tooltip />
-        {/* <Legend /> */}
         <Line type="monotone" dataKey="data.total" stroke={color} activeDot={{ r: 8 }} />
       </LineChart>
     );

@@ -3,7 +3,7 @@ const express = require('express');
 const { MessagingResponse } = require('twilio').twiml;
 
 const cors = require('cors');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 
 const Scraper = require('./lib/scraper');
 const db = require('./lib/db');
@@ -13,15 +13,14 @@ const { uniqueCount } = require('./lib/utils');
 
 require('./lib/cron');
 
-
 const app = express();
 app.use(cors());
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 const scraper = new Scraper();
 let globalPage;
@@ -32,10 +31,18 @@ app.get('/scrape', async (req, res, next) => {
 
   try {
     const {
-      cashData, creditCardData, loanData, investmentData, propertyData,
+      cashData,
+      creditCardData,
+      loanData,
+      investmentData,
+      propertyData,
     } = await scraper.run();
     res.json({
-      cashData, creditCardData, loanData, investmentData, propertyData,
+      cashData,
+      creditCardData,
+      loanData,
+      investmentData,
+      propertyData,
     });
   } catch (err) {
     console.error(err);
@@ -45,7 +52,11 @@ app.get('/scrape', async (req, res, next) => {
 
 app.get('/data', async (req, res) => {
   const {
-    cashData, creditCardData, loanData, investmentData, propertyData,
+    cashData,
+    creditCardData,
+    loanData,
+    investmentData,
+    propertyData,
   } = db.value();
 
   // filter for only unique values
@@ -55,9 +66,12 @@ app.get('/data', async (req, res) => {
   const uniqueInvestmentData = uniqueCount(investmentData);
   const uniquePropertyData = uniqueCount(propertyData);
 
-
   res.json({
-    cashData: uniqueCashData, creditCardData: uniqueCreditCardData, loanData: uniqueLoanData, investmentData: uniqueInvestmentData, propertyData: uniquePropertyData,
+    cashData: uniqueCashData,
+    creditCardData: uniqueCreditCardData,
+    loanData: uniqueLoanData,
+    investmentData: uniqueInvestmentData,
+    propertyData: uniquePropertyData,
   });
 });
 
@@ -71,11 +85,10 @@ app.post('/auth-req', async (req, res, next) => {
     await scraper.authReq(globalPage);
     res.status(200).send();
   } catch (err) {
-    console.log('Auth error. Auth may not be necessary.')
+    console.log('Auth error. Auth may not be necessary.');
     res.status(250).send('You are authenticated.');
     await globalBrowser.close();
   }
-
 });
 
 app.post('/auth-send', async (req, res) => {

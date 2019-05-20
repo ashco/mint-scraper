@@ -9,10 +9,10 @@ const client = require('twilio')(accountSid, authToken);
 function sendSms() {
   client.messages
     .create({
-       body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
-       from: process.env.SMS_SENDER,
-       to: process.env.SMS_TARGET
-     })
+      body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
+      from: process.env.SMS_SENDER,
+      to: process.env.SMS_TARGET,
+    })
     .then(message => console.log(message.sid));
 }
 

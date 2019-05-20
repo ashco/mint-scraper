@@ -29,7 +29,9 @@ export default class AuthButton extends React.Component {
 
   render() {
     return (
-      <button onClick={this.handleClick}>Authenticate!</button>
+      <button type="button" onClick={this.handleClick}>
+        Authenticate!
+      </button>
     );
   }
 }

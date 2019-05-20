@@ -3,7 +3,6 @@ const puppeteer = require('puppeteer');
 const numeral = require('numeral');
 const db = require('./db');
 
-
 class Scraper {
   async loginFill(page) {
     await page.goto('https://mint.intuit.com/overview.event');
@@ -23,14 +22,16 @@ class Scraper {
 
     const loginBtn = await page.$('#ius-sign-in-submit-btn');
     await loginBtn.click();
-    await page.waitForNavigation({ waitUntil: 'networkidle0' }).catch(async () => {
-      // if timeout occurs it could be because MFA screen shows up
-      if (await page.$('#ius-mfa-wrapper') !== null) {
-        throw Error('MFA has been requested. Please authenticate.');
-      } else {
-        throw Error('Login failed, but MFA seems to be fine..');
-      }
-    });
+    await page
+      .waitForNavigation({ waitUntil: 'networkidle0' })
+      .catch(async () => {
+        // if timeout occurs it could be because MFA screen shows up
+        if ((await page.$('#ius-mfa-wrapper')) !== null) {
+          throw Error('MFA has been requested. Please authenticate.');
+        } else {
+          throw Error('Login failed, but MFA seems to be fine..');
+        }
+      });
   }
 
   async authReq(page) {
@@ -44,11 +45,13 @@ class Scraper {
 
         await page.waitFor(1000);
         // confirm that MFA needs to happen
-        if (await page.$('#ius-mfa-option-sms') === null) {
-          throw Error('Error! ..but also Success! It appears that you do not need to authenticate.');
+        if ((await page.$('#ius-mfa-option-sms')) === null) {
+          throw Error(
+            'Error! ..but also Success! It appears that you do not need to authenticate.'
+          );
         }
         // Select receive sms
-        await page.$eval('#ius-mfa-option-sms', el => el.checked = true);
+        await page.$eval('#ius-mfa-option-sms', el => (el.checked = true));
         // Request SMS
         const reqBtn = await page.$('#ius-mfa-options-submit-btn');
         await reqBtn.click();
@@ -65,11 +68,17 @@ class Scraper {
     return new Promise(async (resolve, reject) => {
       try {
         // Fill form
-        await page.$eval('#ius-mfa-confirm-code', (el, code) => {el.value = code}, authCode);
+        await page.$eval(
+          '#ius-mfa-confirm-code',
+          (el, code) => {
+            el.value = code;
+          },
+          authCode
+        );
         const imgEl = await page.$('#ius-mfa-otp-for-sms-header > div');
-        await page.waitFor(1000)
+        await page.waitFor(1000);
         await imgEl.click();
-        await page.waitFor(1000)
+        await page.waitFor(1000);
         // Click btn
         const authBtn = await page.$('#ius-mfa-otp-submit-btn');
         await authBtn.click();
@@ -88,36 +97,50 @@ class Scraper {
       await page.waitForSelector('#module-accounts');
     }
 
-    return page.evaluate(async (totalEl, accountEl) => {
-      const dataObj = {};
-      dataObj.accounts = [];
+    return page.evaluate(
+      async (totalEl, accountEl) => {
+        const dataObj = {};
+        dataObj.accounts = [];
 
-      const totalText = document.querySelector(totalEl).innerText;
-      // Convert to number
-      dataObj.total = await window.convertNum(totalText);
+        const totalText = document.querySelector(totalEl).innerText;
+        // Convert to number
+        dataObj.total = await window.convertNum(totalText);
 
-      const accountNodes = Array.from(document.querySelector(accountEl).childNodes);
+        const accountNodes = Array.from(
+          document.querySelector(accountEl).childNodes
+        );
 
+        accountNodes.forEach(account => {
+          const accountObj = {};
 
-      accountNodes.forEach((account) => {
-        const accountObj = {};
+          accountObj.accountName = account.getElementsByClassName(
+            'accountName'
+          )[0].innerText;
+          const balance = account.getElementsByClassName('balance')[0]
+            .innerText;
+          accountObj.balance = parseFloat(
+            balance.replace('$', '').replace(',', '')
+          );
+          accountObj.updated = account.getElementsByClassName(
+            'last-updated'
+          )[0].innerText;
+          accountObj.institution = account.getElementsByClassName(
+            'nickname'
+          )[0].innerText;
 
-        accountObj.accountName = account.getElementsByClassName('accountName')[0].innerText;
-        const balance = account.getElementsByClassName('balance')[0].innerText;
-        accountObj.balance = parseFloat(balance.replace('$', '').replace(',', ''));
-        accountObj.updated = account.getElementsByClassName('last-updated')[0].innerText;
-        accountObj.institution = account.getElementsByClassName('nickname')[0].innerText;
+          const errorMsg = account.getElementsByClassName('error-on-click')[0]
+            .innerText;
+          accountObj.errorMsg =
+            errorMsg === 'Default error message' ? false : errorMsg;
 
-        const errorMsg = account.getElementsByClassName('error-on-click')[0].innerText;
-        accountObj.errorMsg = errorMsg === 'Default error message'
-          ? false
-          : errorMsg;
+          dataObj.accounts.push(accountObj);
+        });
 
-        dataObj.accounts.push(accountObj);
-      });
-
-      return dataObj;
-    }, totalEl, accountEl);
+        return dataObj;
+      },
+      totalEl,
+      accountEl
+    );
   }
 
   async scrapeCashData(page) {
@@ -128,14 +151,16 @@ class Scraper {
   }
 
   async scrapeCreditCardData(page) {
-    const totalEl = '#moduleAccounts-credit > div > h3 > span.balance.negativeBalance';
+    const totalEl =
+      '#moduleAccounts-credit > div > h3 > span.balance.negativeBalance';
     const accountEl = '#moduleAccounts-credit > ul';
 
     return this.scrapeData(page, totalEl, accountEl);
   }
 
   async scrapeLoanData(page) {
-    const totalEl = '#moduleAccounts-loan > div > h3 > span.balance.negativeBalance';
+    const totalEl =
+      '#moduleAccounts-loan > div > h3 > span.balance.negativeBalance';
     const accountEl = '#moduleAccounts-loan > ul';
 
     return this.scrapeData(page, totalEl, accountEl);
@@ -161,7 +186,7 @@ class Scraper {
     });
     const page = await browser.newPage();
 
-    return {browser, page};
+    return { browser, page };
   }
 
   async run() {
@@ -177,7 +202,13 @@ class Scraper {
 
         await this.login(page);
 
-        const [cashData, creditCardData, loanData, investmentData, propertyData] = await Promise.all([
+        const [
+          cashData,
+          creditCardData,
+          loanData,
+          investmentData,
+          propertyData,
+        ] = await Promise.all([
           this.scrapeCashData(page),
           this.scrapeCreditCardData(page),
           this.scrapeLoanData(page),
@@ -187,7 +218,11 @@ class Scraper {
 
         console.log('Data Scraped!');
         resolve({
-          cashData, creditCardData, loanData, investmentData, propertyData,
+          cashData,
+          creditCardData,
+          loanData,
+          investmentData,
+          propertyData,
         });
       } catch (err) {
         reject(err);
@@ -195,7 +230,6 @@ class Scraper {
       await browser.close();
     });
   }
-
 
   async runCron() {
     let cashData;
@@ -205,7 +239,7 @@ class Scraper {
     let propertyData;
 
     await this.run()
-      .then((res) => {
+      .then(res => {
         cashData = res.cashData;
         creditCardData = res.creditCardData;
         loanData = res.loanData;
@@ -243,7 +277,7 @@ class Scraper {
           })
           .write();
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
       });
   }
