@@ -13,13 +13,13 @@
     "lowdb": "^1.0.0",
     "node-cron": "^2.0.3",
     "numeral": "^2.0.6",
-    "puppeteer": "^1.14.0",
-    "twilio": "^3.31.0"
+    "puppeteer-core": "^1.16.0"
   },
   "scripts": {
-    "dev": "nodemon index.js --ignore db.json"
+    "dev": "nodemon server.js --ignore db.json"
   },
   "devDependencies": {
-    "nodemon": "^1.19.0"
+    "nodemon": "^1.19.0",
+    "puppeteer": "^1.16.0"
   }
 }

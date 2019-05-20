@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const { MessagingResponse } = require('twilio').twiml;
 
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -8,7 +7,6 @@ const bodyParser = require('body-parser');
 const Scraper = require('./lib/scraper');
 const db = require('./lib/db');
 
-const sendSms = require('./lib/sms');
 const { uniqueCount } = require('./lib/utils');
 
 require('./lib/cron');
@@ -79,7 +77,7 @@ app.post('/auth-req', async (req, res, next) => {
   console.log('Auth initializing.');
 
   try {
-    const globalPackage = await scraper.getGlobalPackage();
+    const globalPackage = await scraper.init();
     globalPage = globalPackage.page;
     globalBrowser = globalPackage.browser;
     await scraper.authReq(globalPage);
@@ -105,16 +103,7 @@ app.post('/auth-send', async (req, res) => {
   await globalBrowser.close();
 });
 
-// app.post('/sms', (req, res) => {
-//   const twiml = new MessagingResponse();
-
-//   twiml.message('Welcome to the fiesta!');
-
-//   res.writeHead(200, {'Content-Type': 'text/xml'});
-//   res.end(twiml.toString());
-// });
-
-const port = 5555;
+const port = process.env.PORT || 5555;
 
 app.listen(port, () => {
   console.log(`Mint Scraper Server running on port http://localhost:${port}`);

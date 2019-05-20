@@ -1,5 +1,7 @@
-﻿/* eslint-disable class-methods-use-this */
-const puppeteer = require('puppeteer');
+﻿let puppeteer;
+process.env.NODE_ENV === 'production'
+  ? (puppeteer = require('puppeteer-core'))
+  : (puppeteer = require('puppeteer'));
 const numeral = require('numeral');
 const db = require('./db');
 
@@ -37,7 +39,7 @@ class Scraper {
   async authReq(page) {
     return new Promise(async (resolve, reject) => {
       try {
-        await page.setDefaultTimeout(300000); // 5 minutes
+        // await page.setDefaultTimeout(process.env.DEFAULT_TIMEOUT || 30000);
 
         await this.loginFill(page);
         const loginBtn = await page.$('#ius-sign-in-submit-btn');
@@ -180,24 +182,35 @@ class Scraper {
     return this.scrapeData(page, totalEl, accountEl);
   }
 
-  async getGlobalPackage() {
-    const browser = await puppeteer.launch({
-      headless: process.env.NODE_ENV === 'production',
-    });
+  async init() {
+    const browserConfig =
+      process.env.NODE_ENV === 'production'
+        ? {
+            headless: true,
+            args: [
+              '--no-sandbox',
+              '--disable-setuid-sandbox',
+              '--headless',
+              '--disable-gpu',
+            ],
+            executablePath: '/usr/bin/chromium-browser',
+          }
+        : {
+            headless: false,
+          };
+
+    const browser = await puppeteer.launch(browserConfig);
     const page = await browser.newPage();
+    await page.setDefaultTimeout(process.env.DEFAULT_TIMEOUT || 30000);
 
     return { browser, page };
   }
 
   async run() {
     return new Promise(async (resolve, reject) => {
-      const browser = await puppeteer.launch({
-        headless: true,
-        // headless: process.env.NODE_ENV === 'production',
-      });
+      const { browser, page } = await this.init();
+
       try {
-        const page = await browser.newPage();
-        // await page.setDefaultTimeout(300000); // 5 minutes
         await page.exposeFunction('convertNum', text => numeral(text).value());
 
         await this.login(page);
