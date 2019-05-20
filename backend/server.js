@@ -104,5 +104,5 @@ app.post('/auth-send', async (req, res) => {
 const port = 5555;
 
 app.listen(port, () => {
-  console.log(`Example App running on port http://localhost:${port}`);
+  console.log(`Mint Scraper Server running on port http://localhost:${port}`);
 });

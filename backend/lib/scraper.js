@@ -166,10 +166,11 @@ class Scraper {
 
   async run() {
     return new Promise(async (resolve, reject) => {
+      const browser = await puppeteer.launch({
+        headless: true,
+        // headless: process.env.NODE_ENV === 'production',
+      });
       try {
-        const browser = await puppeteer.launch({
-          headless: process.env.NODE_ENV === 'production',
-        });
         const page = await browser.newPage();
         // await page.setDefaultTimeout(300000); // 5 minutes
         await page.exposeFunction('convertNum', text => numeral(text).value());
@@ -184,8 +185,6 @@ class Scraper {
           this.scrapePropertyData(page),
         ]);
 
-        await browser.close();
-
         console.log('Data Scraped!');
         resolve({
           cashData, creditCardData, loanData, investmentData, propertyData,
@@ -193,6 +192,7 @@ class Scraper {
       } catch (err) {
         reject(err);
       }
+      await browser.close();
     });
   }
 
