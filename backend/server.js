@@ -43,7 +43,7 @@ app.get('/scrape', async (req, res, next) => {
       propertyData,
     });
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
     res.status(500).send('Something broke!');
   }
 });
@@ -97,7 +97,7 @@ app.post('/auth-send', async (req, res) => {
     console.log('Auth successful!');
     res.status(200).send('SUCCESS! Your auth request went swimmingly.');
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
     res.status(500).send(err.message);
   }
   await globalBrowser.close();
