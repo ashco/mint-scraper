@@ -1,7 +1,7 @@
 ﻿/* eslint-disable class-methods-use-this */
 import React from 'react';
 
-const serverPort = 1000;
+const serverPort = 4000;
 
 export default class AuthButton extends React.Component {
   async handleClick() {
