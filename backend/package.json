@@ -16,7 +16,8 @@
     "puppeteer-core": "^1.16.0"
   },
   "scripts": {
-    "dev": "nodemon server.js --ignore db.json"
+    "dev": "nodemon server.js --ignore db.json",
+    "start": "node server.js"
   },
   "devDependencies": {
     "nodemon": "^1.19.0",

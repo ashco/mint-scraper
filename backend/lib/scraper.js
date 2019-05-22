@@ -15,8 +15,8 @@ class Scraper {
     const usernameInput = await page.$('#ius-userid');
     const passwordInput = await page.$('#ius-password');
 
-    await usernameInput.type(process.env.LOGINUSER);
-    await passwordInput.type(process.env.LOGINPASS);
+    await usernameInput.type(process.env.MINT_USER);
+    await passwordInput.type(process.env.MINT_PASS);
   }
 
   async login(page) {
@@ -196,7 +196,7 @@ class Scraper {
             executablePath: '/usr/bin/chromium-browser',
           }
         : {
-            headless: false,
+            headless: true,
           };
 
     const browser = await puppeteer.launch(browserConfig);
@@ -206,7 +206,7 @@ class Scraper {
     return { browser, page };
   }
 
-  async run() {
+  async scrape() {
     return new Promise(async (resolve, reject) => {
       const { browser, page } = await this.init();
 
@@ -251,7 +251,7 @@ class Scraper {
     let investmentData;
     let propertyData;
 
-    await this.run()
+    await this.scrape()
       .then(res => {
         cashData = res.cashData;
         creditCardData = res.creditCardData;

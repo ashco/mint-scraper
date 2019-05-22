@@ -34,7 +34,7 @@ app.get('/scrape', async (req, res, next) => {
       loanData,
       investmentData,
       propertyData,
-    } = await scraper.run();
+    } = await scraper.scrape();
     res.json({
       cashData,
       creditCardData,
@@ -42,9 +42,11 @@ app.get('/scrape', async (req, res, next) => {
       investmentData,
       propertyData,
     });
+
+    res.status(200).send('Fresh data scraped!');
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Something broke!');
+    res.status(500).send(err.message);
   }
 });
 
@@ -103,7 +105,7 @@ app.post('/auth-send', async (req, res) => {
   await globalBrowser.close();
 });
 
-const port = process.env.PORT || 5555;
+const port = process.env.PORT || 4000;
 
 app.listen(port, () => {
   console.log(`Mint Scraper Server running on port http://localhost:${port}`);
