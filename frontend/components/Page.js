@@ -2,10 +2,12 @@
 
 import { ScrapeProvider } from './ScrapeContext';
 
+const targetIp = '192.168.86.72';
+const port = 4001;
 const targetUrl =
   process.env.NODE_ENV === 'production'
-    ? 'http://192.168.86.72:4000'
-    : 'http://localhost:4000';
+    ? `http://${targetIp}:${port}`
+    : `http://localhost:${port}`;
 
 // Custom Hook!
 function useScrapes() {

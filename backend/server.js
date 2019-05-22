@@ -105,7 +105,7 @@ app.post('/auth-send', async (req, res) => {
   await globalBrowser.close();
 });
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 4001;
 
 app.listen(port, () => {
   console.log(`Mint Scraper Server running on port http://localhost:${port}`);
