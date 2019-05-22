@@ -14,7 +14,7 @@ export default class AuthButton extends React.Component {
       method: 'POST',
     });
 
-    if (res1.status === 250) {
+    if (res1.status === 201) {
       const message1 = await res1.text();
       alert(message1);
     } else {

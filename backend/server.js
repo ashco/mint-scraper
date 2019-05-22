@@ -86,7 +86,7 @@ app.post('/auth-req', async (req, res, next) => {
     res.status(200).send();
   } catch (err) {
     console.log('Auth error. Auth may not be necessary.');
-    res.status(250).send('You are authenticated.');
+    res.status(201).send('You are authenticated.');
     await globalBrowser.close();
   }
 });

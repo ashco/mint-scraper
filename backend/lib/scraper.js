@@ -186,7 +186,7 @@ class Scraper {
     const browserConfig =
       process.env.NODE_ENV === 'production'
         ? {
-            headless: true,
+            headless: false,
             args: [
               '--no-sandbox',
               '--disable-setuid-sandbox',
