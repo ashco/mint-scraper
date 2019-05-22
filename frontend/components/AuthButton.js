@@ -1,7 +1,10 @@
 ﻿/* eslint-disable class-methods-use-this */
 import React from 'react';
 
-const targetUrl = 'http://192.168.86.72:4000';
+const targetUrl =
+  process.env.NODE_ENV === 'production'
+    ? 'http://192.168.86.72:4000'
+    : 'http://localhost:4000';
 
 export default class AuthButton extends React.Component {
   async handleClick() {
