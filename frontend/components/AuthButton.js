@@ -1,11 +1,11 @@
 ﻿/* eslint-disable class-methods-use-this */
 import React from 'react';
 
-const serverPort = 4000;
+const targetUrl = 'http://192.168.86.72:4000';
 
 export default class AuthButton extends React.Component {
   async handleClick() {
-    const res1 = await fetch(`http://localhost:${serverPort}/auth-req`, {
+    const res1 = await fetch(`${targetUrl}/auth-req`, {
       method: 'POST',
     });
 
@@ -16,7 +16,7 @@ export default class AuthButton extends React.Component {
       // collect sms
       const authCode = prompt('Please provide the 6-digit auth code.');
       // send code for auth
-      const res2 = await fetch(`http://localhost:${serverPort}/auth-send`, {
+      const res2 = await fetch(`${targetUrl}/auth-send`, {
         method: 'POST',
         body: JSON.stringify({ authCode }),
         headers: {

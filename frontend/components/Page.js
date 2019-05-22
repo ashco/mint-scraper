@@ -2,6 +2,8 @@
 
 import { ScrapeProvider } from './ScrapeContext';
 
+const targetUrl = 'http://192.168.86.72:4000';
+
 // Custom Hook!
 function useScrapes() {
   // Initial State inside hook
@@ -14,7 +16,7 @@ function useScrapes() {
   });
   // fetch function
   async function fetchScrapes() {
-    const res = await fetch('http://localhost:5555/data');
+    const res = await fetch(`${targetUrl}/data`);
     const data = await res.json();
     setScrapes(data);
   }
