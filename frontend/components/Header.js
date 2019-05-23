@@ -5,9 +5,9 @@ import ScrapeButton from './Buttons/ScrapeButton';
 
 const Header = () => (
   <HeaderStyle>
-    <AuthButton />
-    <TitleStyle>Mint Scraper</TitleStyle>
     <ScrapeButton />
+    <TitleStyle>Mint Scraper</TitleStyle>
+    <AuthButton />
   </HeaderStyle>
 );
 
@@ -21,6 +21,7 @@ const HeaderStyle = styled.div`
 
 const TitleStyle = styled.h1`
   font-size: 36px;
+  font-weight: 300;
   color: var(--header-text-color);
 `;
 
