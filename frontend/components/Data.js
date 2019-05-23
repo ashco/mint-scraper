@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { ScrapeContext } from './ScrapeContext';
 import Table from './Table';
 import Chart from './Chart';
+import DataButton from './Buttons/DataButton';
 
 export default function Data() {
   const { scrapes, fetchScrapes } = useContext(ScrapeContext);
@@ -30,23 +31,23 @@ export default function Data() {
 
   return (
     <DataWrapper>
-      <ButtonRow>
-        <button type="button" onClick={() => setTarget(cashObj)}>
+      <div>
+        <DataButton type="button" onClick={() => setTarget(cashObj)}>
           Cash
-        </button>
-        <button type="button" onClick={() => setTarget(creditCardObj)}>
+        </DataButton>
+        <DataButton type="button" onClick={() => setTarget(creditCardObj)}>
           Credit Card
-        </button>
-        <button type="button" onClick={() => setTarget(loanObj)}>
+        </DataButton>
+        <DataButton type="button" onClick={() => setTarget(loanObj)}>
           Loans
-        </button>
-        <button type="button" onClick={() => setTarget(investmentObj)}>
+        </DataButton>
+        <DataButton type="button" onClick={() => setTarget(investmentObj)}>
           Investments
-        </button>
-        <button type="button" onClick={() => setTarget(propertyObj)}>
+        </DataButton>
+        <DataButton type="button" onClick={() => setTarget(propertyObj)}>
           Property
-        </button>
-      </ButtonRow>
+        </DataButton>
+      </div>
 
       <div>
         {/* <h2>Chart</h2> */}
@@ -77,13 +78,4 @@ const DataWrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-`;
-
-const ButtonRow = styled.div`
-  /* display: flex;
-  justify-content: center; */
-  button {
-    margin: 1rem;
-    padding: 0.75rem 3rem;
-  }
 `;

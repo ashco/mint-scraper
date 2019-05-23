@@ -1,15 +1,15 @@
 ﻿import Page from '../components/Page';
 import Data from '../components/Data';
-import AuthButton from '../components/AuthButton';
-import ScrapeButton from '../components/ScrapeButton';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import '../styles/style.css';
 
 export default function Home() {
   return (
     <Page>
-      <h2>Wealth Tracker</h2>
-      <AuthButton />
-      <ScrapeButton />
+      <Header />
       <Data />
+      <Footer />
     </Page>
   );
 }

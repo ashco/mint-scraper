@@ -1,6 +1,9 @@
 ﻿/* eslint-disable class-methods-use-this */
 import React from 'react';
 
+import PrimaryButtonStyle from './PrimaryButton';
+import PhoneIcon from '../Icons/Phone';
+
 const targetIp = '192.168.86.72';
 const port = 4001;
 const targetUrl =
@@ -18,9 +21,13 @@ export default class ScrapeButton extends React.Component {
 
   render() {
     return (
-      <button type="button" onClick={this.handleClick}>
-        Scrape!
-      </button>
+      <PrimaryButtonStyle
+        title="Scrape!"
+        type="button"
+        onClick={this.handleClick}
+      >
+        <PhoneIcon />
+      </PrimaryButtonStyle>
     );
   }
 }

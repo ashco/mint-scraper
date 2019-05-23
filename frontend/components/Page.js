@@ -1,4 +1,5 @@
 ﻿import { useEffect, useState } from 'react';
+import styled from 'styled-components';
 
 import { ScrapeProvider } from './ScrapeContext';
 
@@ -38,7 +39,13 @@ export default function Page({ children }) {
   const hookInfo = useScrapes();
   return (
     <ScrapeProvider value={hookInfo}>
-      <div className="page">{children}</div>
+      <PageStyle className="page">{children}</PageStyle>
     </ScrapeProvider>
   );
 }
+
+const PageStyle = styled.div`
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 100px auto 100px;
+`;

@@ -1,6 +1,9 @@
 ﻿/* eslint-disable class-methods-use-this */
 import React from 'react';
 
+import PrimaryButtonStyle from './PrimaryButton';
+import SyncIcon from '../Icons/Sync';
+
 const targetIp = '192.168.86.72';
 const port = 4001;
 const targetUrl =
@@ -36,9 +39,17 @@ export default class AuthButton extends React.Component {
 
   render() {
     return (
-      <button type="button" onClick={this.handleClick}>
-        Authenticate!
-      </button>
+      <PrimaryButtonStyle
+        type="button"
+        title="Authenticate!"
+        onClick={this.handleClick}
+      >
+        <SyncIcon />
+      </PrimaryButtonStyle>
     );
   }
 }
+
+// const AuthButtonStyle = styled(PrimaryButton)`
+
+// `;
