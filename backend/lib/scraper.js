@@ -186,7 +186,7 @@ class Scraper {
     const browserConfig =
       process.env.NODE_ENV === 'production'
         ? {
-            headless: false,
+            headless: true,
             args: [
               '--no-sandbox',
               '--disable-setuid-sandbox',
@@ -196,7 +196,7 @@ class Scraper {
             executablePath: '/usr/bin/chromium-browser',
           }
         : {
-            headless: true,
+            headless: false,
           };
 
     const browser = await puppeteer.launch(browserConfig);

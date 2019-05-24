@@ -10,7 +10,7 @@ const PrimaryButtonStyle = styled.button`
     cursor: pointer;
   }
   svg {
-    color: var(--header-text-color);
+    color: var(--bg-color);
     height: 100%;
   }
 `;

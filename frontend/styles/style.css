@@ -4,8 +4,12 @@
 */
 
 * {
-  --header-text-color: white;
-  --header-bg-color: #00a6a4;
+  --bg-color: #eeeeee;
+  --mint-color: #00a6a4;
+  --red-color: #f14764;
+  --orange-color: #ffa64b;
+  --blue-color: #1f7ae4;
+  --purple-color: #7a3ed4;
 }
 
 html,
@@ -97,6 +101,7 @@ video {
   vertical-align: baseline;
   font-family: -apple-system, BlinkMacSystemFont, Roboto, Oxygen-Sans, Ubuntu,
     Cantarell, Helvetica Neue, sans-serif;
+  color: #333;
 }
 /* HTML5 display-role reset for older browsers */
 article,

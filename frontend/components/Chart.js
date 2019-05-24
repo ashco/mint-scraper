@@ -9,6 +9,7 @@ import {
   Legend,
 } from 'recharts';
 import { distanceInWords } from 'date-fns';
+import formatCurrency from '../libs/formatCurrency';
 
 export default class Chart extends PureComponent {
   render() {
@@ -32,8 +33,11 @@ export default class Chart extends PureComponent {
       >
         <CartesianGrid strokeDasharray="5 5" />
         <XAxis dataKey="date" />
-        <YAxis />
-        <Tooltip />
+        <YAxis
+          tickFormatter={(value, name, props) => [formatCurrency(value)]}
+          width={90}
+        />
+        <Tooltip formatter={(value, name, props) => [formatCurrency(value)]} />
         <Line
           type="monotone"
           dataKey="data.total"

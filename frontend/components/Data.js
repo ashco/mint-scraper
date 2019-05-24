@@ -7,69 +7,95 @@ import Chart from './Chart';
 import DataButton from './Buttons/DataButton';
 
 export default function Data() {
-  const { scrapes, fetchScrapes } = useContext(ScrapeContext);
+  const { scrapes } = useContext(ScrapeContext);
 
-  const cashObj = { data: scrapes.cashData, title: 'Cash', color: '#82ca9d' };
+  const cashObj = {
+    data: scrapes.cashData,
+    title: 'Cash',
+    color: 'var(--mint-color)',
+  };
   const creditCardObj = {
     data: scrapes.creditCardData,
     title: 'Credit Card',
-    color: '#e59246',
+    color: 'var(--red-color)',
   };
-  const loanObj = { data: scrapes.loanData, title: 'Loans', color: '#d58484' };
+  const loanObj = {
+    data: scrapes.loanData,
+    title: 'Loans',
+    color: 'var(--orange-color)',
+  };
   const investmentObj = {
     data: scrapes.investmentData,
     title: 'Investments',
-    color: '#84cdd5',
+    color: 'var(--blue-color)',
   };
   const propertyObj = {
     data: scrapes.propertyData,
     title: 'Property',
-    color: '#8884d8',
+    color: 'var(--purple-color)',
   };
 
-  const [target, setTarget] = useState(cashObj);
+  const [targetData, setTargetData] = useState(cashObj);
+
+  useEffect(() => {
+    setTargetData(targetData);
+  });
 
   return (
     <DataWrapper>
       <div>
-        <DataButton type="button" onClick={() => setTarget(cashObj)}>
+        <DataButton
+          type="button"
+          color={cashObj.color}
+          primary={targetData.title === 'Cash'}
+          onClick={() => setTargetData(cashObj)}
+        >
           Cash
         </DataButton>
-        <DataButton type="button" onClick={() => setTarget(creditCardObj)}>
+        <DataButton
+          type="button"
+          color={creditCardObj.color}
+          primary={targetData.title === 'Credit Card'}
+          onClick={() => setTargetData(creditCardObj)}
+        >
           Credit Card
         </DataButton>
-        <DataButton type="button" onClick={() => setTarget(loanObj)}>
+        <DataButton
+          type="button"
+          color={loanObj.color}
+          primary={targetData.title === 'Loans'}
+          onClick={() => setTargetData(loanObj)}
+        >
           Loans
         </DataButton>
-        <DataButton type="button" onClick={() => setTarget(investmentObj)}>
+        <DataButton
+          type="button"
+          color={investmentObj.color}
+          primary={targetData.title === 'Investments'}
+          onClick={() => setTargetData(investmentObj)}
+        >
           Investments
         </DataButton>
-        <DataButton type="button" onClick={() => setTarget(propertyObj)}>
+        <DataButton
+          type="button"
+          color={propertyObj.color}
+          primary={targetData.title === 'Property'}
+          onClick={() => setTargetData(propertyObj)}
+        >
           Property
         </DataButton>
       </div>
 
       <div>
-        {/* <h2>Chart</h2> */}
         <Chart
-          title={target.title}
-          color={target.color}
-          scrapes={target.data}
+          title={targetData.title}
+          color={targetData.color}
+          scrapes={targetData.data}
         />
       </div>
-      {/* <Chart title="Credit Card" color="#e59246" scrapes={scrapes.creditCardData} />
-      <Chart title="Loans" color="#d58484" scrapes={scrapes.loanData} />
-      <Chart title="Investments" color="#84cdd5" scrapes={scrapes.investmentData} />
-      <Chart title="Property" color="#8884d8" scrapes={scrapes.propertyData} /> */}
-      <div>
-        <h2>Table</h2>
-        <Table title={target.title} scrapes={target.data} />
-      </div>
-      {/* <Table title="Credit Card" scrapes={scrapes.creditCardData} />
-      <Table title="Loans" scrapes={scrapes.loanData} />
-      <Table title="Investments" scrapes={scrapes.investmentData} />
-      <Table title="Property" scrapes={scrapes.propertyData} /> */}
-      {/* <ul /> */}
+      <TableWrapper>
+        <Table title={targetData.title} scrapes={targetData.data} />
+      </TableWrapper>
     </DataWrapper>
   );
 }
@@ -78,4 +104,8 @@ const DataWrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+`;
+
+const TableWrapper = styled.div`
+  margin-top: 10px;
 `;

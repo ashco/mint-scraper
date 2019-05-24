@@ -1,24 +1,43 @@
 ﻿import React from 'react';
+import styled from 'styled-components';
 import { distanceInWords } from 'date-fns';
+import formatCurrency from '../libs/formatCurrency';
 
 export default function Table({ scrapes, title }) {
-  // const scrapesReversed = [...scrapes].reverse(); // prevents mutating data
+  const scrapesReversed = [...scrapes].reverse(); // prevents mutating data
   return (
-    <table>
+    <TableStyle>
       <thead>
         <tr>
-          <td>{title}</td>
+          <td>Amount</td>
           <td>Date</td>
         </tr>
       </thead>
       <tbody>
-        {scrapes.map(scrape => (
+        {scrapesReversed.map(scrape => (
           <tr key={scrape.date}>
-            <td>{scrape.data.total}</td>
-            <td>{distanceInWords(new Date(scrape.date), new Date())}</td>
+            <td>{formatCurrency(scrape.data.total)}</td>
+            <td>
+              {`${distanceInWords(new Date(scrape.date), new Date())} ago`}
+            </td>
           </tr>
         ))}
       </tbody>
-    </table>
+    </TableStyle>
   );
 }
+
+const TableStyle = styled.table`
+  font-size: 18px;
+  width: 280px;
+  td {
+    width: 140px;
+    padding: 4px 8px;
+  }
+  thead {
+    td {
+      font-weight: 600;
+      text-decoration: underline;
+    }
+  }
+`;

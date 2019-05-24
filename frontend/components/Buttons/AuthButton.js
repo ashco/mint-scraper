@@ -2,7 +2,7 @@
 import React from 'react';
 
 import PrimaryButtonStyle from './PrimaryButton';
-import SyncIcon from '../Icons/Sync';
+import PhoneIcon from '../Icons/Phone';
 
 const targetIp = '192.168.86.72';
 const port = 4001;
@@ -44,7 +44,7 @@ export default class AuthButton extends React.Component {
         title="Authenticate!"
         onClick={this.handleClick}
       >
-        <SyncIcon />
+        <PhoneIcon />
       </PrimaryButtonStyle>
     );
   }

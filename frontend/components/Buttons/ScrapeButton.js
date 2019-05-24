@@ -2,7 +2,7 @@
 import React from 'react';
 
 import PrimaryButtonStyle from './PrimaryButton';
-import PhoneIcon from '../Icons/Phone';
+import SyncIcon from '../Icons/Sync';
 
 const targetIp = '192.168.86.72';
 const port = 4001;
@@ -26,7 +26,7 @@ export default class ScrapeButton extends React.Component {
         type="button"
         onClick={this.handleClick}
       >
-        <PhoneIcon />
+        <SyncIcon />
       </PrimaryButtonStyle>
     );
   }
