@@ -16,7 +16,6 @@ const HeaderStyle = styled.div`
   justify-content: space-between;
   align-items: center;
   background: var(--mint-color);
-  height: 100px;
 `;
 
 const TitleStyle = styled.h1`

@@ -16,7 +16,12 @@ export default class ScrapeButton extends React.Component {
     const res = await fetch(`${targetUrl}/scrape`);
     const message = await res.text();
 
-    alert(message);
+    if (res.status === 200) {
+      alert('Fresh data scraped!');
+    }
+    if (res.status === 500) {
+      alert(message);
+    }
   }
 
   render() {

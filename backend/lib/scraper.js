@@ -262,30 +262,35 @@ class Scraper {
         db.get('cashData')
           .push({
             date: Date.now(),
+            name: 'Cash',
             data: cashData,
           })
           .write();
         db.get('creditCardData')
           .push({
             date: Date.now(),
+            name: 'Credit Cards',
             data: creditCardData,
           })
           .write();
         db.get('loanData')
           .push({
             date: Date.now(),
+            name: 'Loans',
             data: loanData,
           })
           .write();
         db.get('investmentData')
           .push({
             date: Date.now(),
+            name: 'Investments',
             data: investmentData,
           })
           .write();
         db.get('propertyData')
           .push({
             date: Date.now(),
+            name: 'Property',
             data: propertyData,
           })
           .write();

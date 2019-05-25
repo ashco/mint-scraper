@@ -6,10 +6,7 @@ import { ScrapeContext } from './ScrapeContext';
 
 const TimestampText = () => {
   const { scrapes } = useContext(ScrapeContext);
-  console.log(scrapes);
-  // const latestCash = [...scrapes.cashData].reverse()[
-  //   scrapes.cashData.length - 1
-  // ];
+
   const getTimestamp = scrapes => {
     const scrapeArr = [
       scrapes.cashData[scrapes.cashData.length - 1].date,

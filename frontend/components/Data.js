@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { ScrapeContext } from './ScrapeContext';
 import Table from './Table';
 import Chart from './Chart';
+import OverviewChart from './OverviewChart';
 import DataButton from './Buttons/DataButton';
 
 export default function Data() {
@@ -44,6 +45,13 @@ export default function Data() {
   return (
     <DataWrapper>
       <div>
+        {/* <DataButton
+          type="button"
+          color="#333"
+          primary={targetData.title === 'Overview'}
+        >
+          Overview
+        </DataButton> */}
         <DataButton
           type="button"
           color={cashObj.color}
@@ -87,6 +95,7 @@ export default function Data() {
       </div>
 
       <div>
+        {/* <OverviewChart scrapes={scrapes} /> */}
         <Chart
           title={targetData.title}
           color={targetData.color}
@@ -107,5 +116,5 @@ const DataWrapper = styled.div`
 `;
 
 const TableWrapper = styled.div`
-  margin-top: 10px;
+  margin: 20px auto 40px;
 `;

@@ -28,21 +28,7 @@ app.get('/scrape', async (req, res, next) => {
   console.log('Scraping!!');
 
   try {
-    const {
-      cashData,
-      creditCardData,
-      loanData,
-      investmentData,
-      propertyData,
-    } = await scraper.scrape();
-    res.json({
-      cashData,
-      creditCardData,
-      loanData,
-      investmentData,
-      propertyData,
-    });
-
+    await scraper.runCron();
     res.status(200).send('Fresh data scraped!');
   } catch (err) {
     console.error(err.message);

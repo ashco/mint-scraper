@@ -45,7 +45,7 @@ export default function Page({ children }) {
 }
 
 const PageStyle = styled.div`
-  height: 100vh;
+  min-height: 100vh;
   display: grid;
-  grid-template-rows: 100px auto 100px;
+  grid-template-rows: 100px auto 70px;
 `;

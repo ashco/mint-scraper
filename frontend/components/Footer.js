@@ -16,7 +16,6 @@ const FooterStyle = styled.div`
   justify-content: space-between;
   align-items: center;
   background: var(--mint-color);
-  height: 100px;
 `;
 
 export default Footer;

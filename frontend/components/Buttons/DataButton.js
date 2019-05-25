@@ -5,7 +5,6 @@ const DataButton = styled.button`
   color: ${props => (props.primary ? 'var(--bg-color)' : props.color)};
   background: ${props => (props.primary ? props.color : 'none')};
   font-size: 20px;
-  /* font-weight: ${props => (props.primary ? '600' : '300')}; */
   font-weight: 500;
   margin: 20px 10px;
   padding: 10px 25px;

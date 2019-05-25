@@ -1,6 +1,7 @@
 ﻿import React, { PureComponent } from 'react';
 import {
   LineChart,
+  ResponsiveContainer,
   Line,
   XAxis,
   YAxis,
@@ -21,13 +22,13 @@ export default class Chart extends PureComponent {
 
     return (
       <LineChart
-        width={800}
-        height={600}
         data={scrapesWithDates}
+        height={600}
+        width={800}
         margin={{
           top: 5,
           right: 30,
-          left: 20,
+          left: 30,
           bottom: 5,
         }}
       >
