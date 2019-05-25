@@ -29,7 +29,7 @@ export default function Table({ scrapes, title }) {
 
 const TableStyle = styled.table`
   font-size: 18px;
-  width: 320px;
+  width: 360px;
   td {
     width: 140px;
     padding: 4px 8px;
