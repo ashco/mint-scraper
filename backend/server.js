@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const Scraper = require('./lib/scraper');
 const db = require('./lib/db');
 
-const { uniqueCount } = require('./lib/utils');
+const { uniqueCount, getOverviewData } = require('./lib/utils');
 
 require('./lib/cron');
 
@@ -59,6 +59,33 @@ app.get('/data', async (req, res) => {
     investmentData: uniqueInvestmentData,
     propertyData: uniquePropertyData,
   });
+});
+
+app.get('/data-overview', async (req, res) => {
+  const {
+    cashData,
+    creditCardData,
+    loanData,
+    investmentData,
+    propertyData,
+  } = db.value();
+
+  // // filter for only unique values
+  const uniqueCashData = uniqueCount(cashData);
+  const uniqueCreditCardData = uniqueCount(creditCardData);
+  const uniqueLoanData = uniqueCount(loanData);
+  const uniqueInvestmentData = uniqueCount(investmentData);
+  const uniquePropertyData = uniqueCount(propertyData);
+
+  const overviewData = getOverviewData({
+    cashData: uniqueCashData,
+    creditCardData: uniqueCreditCardData,
+    loanData: uniqueLoanData,
+    investmentData: uniqueInvestmentData,
+    propertyData: uniquePropertyData,
+  });
+
+  res.json(overviewData);
 });
 
 app.post('/auth-req', async (req, res, next) => {
