@@ -7,31 +7,15 @@ import { ScrapeContext } from './ScrapeContext';
 const TimestampText = () => {
   const { scrapes } = useContext(ScrapeContext);
 
-  const getTimestamp = scrapes => {
-    const scrapeArr = [
-      scrapes.cashData[scrapes.cashData.length - 1].date,
-      scrapes.creditCardData[scrapes.creditCardData.length - 1].date,
-      scrapes.loanData[scrapes.loanData.length - 1].date,
-      scrapes.investmentData[scrapes.investmentData.length - 1].date,
-      scrapes.propertyData[scrapes.propertyData.length - 1].date,
-    ];
-
-    const latestScrape = scrapeArr.reduce((acc, cur) => {
-      if (acc < cur) {
-        acc = cur;
-      }
-      return acc;
-    }, 0);
-
-    const timestamp = distanceInWords(new Date(latestScrape), new Date());
-
-    return timestamp;
-  };
-
   let timestamp = false;
   // This is disgusting, but works for now..
-  if (scrapes.cashData.length > 0) {
-    timestamp = getTimestamp(scrapes);
+  if (scrapes.length > 0) {
+    const latestDate = scrapes.reduce(
+      (acc, cur) => (acc < cur.date ? cur.date : acc),
+      0
+    );
+
+    timestamp = distanceInWords(new Date(latestDate), new Date());
   }
 
   return (

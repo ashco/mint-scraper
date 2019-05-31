@@ -4,34 +4,34 @@ import styled from 'styled-components';
 import { ScrapeContext } from './ScrapeContext';
 import Table from './Table';
 import Chart from './Chart';
-import OverviewChart from './OverviewChart';
+// import OverviewChart from './OverviewChart';
 import DataButton from './Buttons/DataButton';
 
 export default function Data() {
   const { scrapes } = useContext(ScrapeContext);
 
   const cashObj = {
-    data: scrapes.cashData,
+    data: 'cash',
     title: 'Cash',
     color: 'var(--mint-color)',
   };
   const creditCardObj = {
-    data: scrapes.creditCardData,
+    // data: scrapes.totalCreditCard,
     title: 'Credit Card',
     color: 'var(--red-color)',
   };
   const loanObj = {
-    data: scrapes.loanData,
+    // data: scrapes.totalLoans,
     title: 'Loans',
     color: 'var(--orange-color)',
   };
   const investmentObj = {
-    data: scrapes.investmentData,
+    // data: scrapes.totalInvestments,
     title: 'Investments',
     color: 'var(--blue-color)',
   };
   const propertyObj = {
-    data: scrapes.propertyData,
+    // data: scrapes.totalProperty,
     title: 'Property',
     color: 'var(--purple-color)',
   };
@@ -96,11 +96,11 @@ export default function Data() {
 
       <div>
         {/* <OverviewChart scrapes={scrapes} /> */}
-        <Chart
+        {/* <Chart
           title={targetData.title}
           color={targetData.color}
-          scrapes={targetData.data}
-        />
+          data={targetData.data}
+        /> */}
       </div>
       <TableWrapper>
         <Table title={targetData.title} scrapes={targetData.data} />

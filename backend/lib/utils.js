@@ -6,7 +6,7 @@
   });
 }
 
-function getOverviewData({
+function formatData({
   cashData,
   creditCardData,
   loanData,
@@ -20,13 +20,21 @@ function getOverviewData({
     investmentData,
     propertyData,
   ];
-  const overviewData = [];
-  // go through every cashData object and add it to overview data object with date. Other properties (totalCreditCard) will be marked as null.
 
-  // create objects
+  const key = [
+    'totalCash',
+    'totalCreditCard',
+    'totalLoans',
+    'totalInvestments',
+    'totalProperty',
+  ];
+
+  const data = [];
+
+  // create all objects with timestamps.
   accounts.forEach(account => {
     account.forEach(scrape => {
-      overviewData.push({
+      data.push({
         date: scrape.date,
         totalCash: null,
         totalCreditCard: null,
@@ -38,29 +46,30 @@ function getOverviewData({
   });
 
   // go through each account and place data in appropriate object spot
-  cashData.forEach(scrape => {
-    const { date } = scrape;
-    const { total } = scrape.data;
+  accounts.forEach((account, i) => {
+    account.forEach(scrape => {
+      const { date } = scrape;
+      const { total } = scrape.data;
 
-    // find overviewData index of object with same date.
-    const i = overviewData.findIndex(obj => obj.date === date);
-    // add total number to overviewData index object's totalCash section
-    overviewData[i].totalCash = total;
+      // find data index of object with same date.
+      const index = data.findIndex(obj => obj.date === date);
+      // add total number to data index object's totalCash section
+      data[index][key[i]] = total;
+    });
   });
-
-  return overviewData;
+  return data;
 }
 
 // Want to format data like..
-const overviewData = [
-  {
-    date: 12345678,
-    totalCash: 19762.39,
-    totalCreditCard: 197162.39,
-    totalLoans: 1972.39,
-    totalInvestments: 119762.39,
-    totalProperty: 1762.39,
-  },
-];
+// const data = [
+//   {
+//     date: 12345678,
+//     totalCash: 19762.39,
+//     totalCreditCard: 197162.39,
+//     totalLoans: 1972.39,
+//     totalInvestments: 119762.39,
+//     totalProperty: 1762.39,
+//   },
+// ];
 
-module.exports = { uniqueCount, getOverviewData };
+module.exports = { uniqueCount, formatData };

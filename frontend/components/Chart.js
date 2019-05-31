@@ -14,7 +14,7 @@ import formatCurrency from '../libs/formatCurrency';
 
 export default class Chart extends PureComponent {
   render() {
-    const { scrapes, color } = this.props;
+    const { data, color } = this.props;
     const scrapesWithDates = scrapes.map(scrape => ({
       ...scrape,
       date: distanceInWords(new Date(scrape.date), new Date()),

@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const Scraper = require('./lib/scraper');
 const db = require('./lib/db');
 
-const { uniqueCount, getOverviewData } = require('./lib/utils');
+const { uniqueCount, formatData } = require('./lib/utils');
 
 require('./lib/cron');
 
@@ -52,32 +52,7 @@ app.get('/data', async (req, res) => {
   const uniqueInvestmentData = uniqueCount(investmentData);
   const uniquePropertyData = uniqueCount(propertyData);
 
-  res.json({
-    cashData: uniqueCashData,
-    creditCardData: uniqueCreditCardData,
-    loanData: uniqueLoanData,
-    investmentData: uniqueInvestmentData,
-    propertyData: uniquePropertyData,
-  });
-});
-
-app.get('/data-overview', async (req, res) => {
-  const {
-    cashData,
-    creditCardData,
-    loanData,
-    investmentData,
-    propertyData,
-  } = db.value();
-
-  // // filter for only unique values
-  const uniqueCashData = uniqueCount(cashData);
-  const uniqueCreditCardData = uniqueCount(creditCardData);
-  const uniqueLoanData = uniqueCount(loanData);
-  const uniqueInvestmentData = uniqueCount(investmentData);
-  const uniquePropertyData = uniqueCount(propertyData);
-
-  const overviewData = getOverviewData({
+  const data = formatData({
     cashData: uniqueCashData,
     creditCardData: uniqueCreditCardData,
     loanData: uniqueLoanData,
@@ -85,8 +60,34 @@ app.get('/data-overview', async (req, res) => {
     propertyData: uniquePropertyData,
   });
 
-  res.json(overviewData);
+  res.json(data);
 });
+
+// app.get('/data-format', async (req, res) => {
+//   const {
+//     cashData,
+//     creditCardData,
+//     loanData,
+//     investmentData,
+//     propertyData,
+//   } = db.value();
+
+//   const uniqueCashData = uniqueCount(cashData);
+//   const uniqueCreditCardData = uniqueCount(creditCardData);
+//   const uniqueLoanData = uniqueCount(loanData);
+//   const uniqueInvestmentData = uniqueCount(investmentData);
+//   const uniquePropertyData = uniqueCount(propertyData);
+
+//   const data = formatData({
+//     cashData: uniqueCashData,
+//     creditCardData: uniqueCreditCardData,
+//     loanData: uniqueLoanData,
+//     investmentData: uniqueInvestmentData,
+//     propertyData: uniquePropertyData,
+//   });
+
+//   res.json(data);
+// });
 
 app.post('/auth-req', async (req, res, next) => {
   console.log('Auth initializing.');

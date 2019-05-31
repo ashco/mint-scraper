@@ -4,7 +4,7 @@ import { distanceInWords } from 'date-fns';
 import formatCurrency from '../libs/formatCurrency';
 
 export default function Table({ scrapes, title }) {
-  const scrapesReversed = [...scrapes].reverse(); // prevents mutating data
+  // const scrapesReversed = [...scrapes].reverse(); // prevents mutating data
   return (
     <TableStyle>
       <thead>
@@ -14,14 +14,14 @@ export default function Table({ scrapes, title }) {
         </tr>
       </thead>
       <tbody>
-        {scrapesReversed.map(scrape => (
+        {/* {scrapesReversed.map(scrape => (
           <tr key={scrape.date}>
             <td>{formatCurrency(scrape.data.total)}</td>
             <td>
               {`${distanceInWords(new Date(scrape.date), new Date())} ago`}
             </td>
           </tr>
-        ))}
+        ))} */}
       </tbody>
     </TableStyle>
   );
