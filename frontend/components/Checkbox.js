@@ -28,7 +28,9 @@ const StyledCheckbox = styled.div`
   background: ${props => (props.checked ? props.color : '#dcdcdc')};
   border-radius: 3px;
   transition: all 150ms;
-
+  &:hover {
+    cursor: pointer;
+  }
   ${HiddenCheckbox}:focus + & {
     box-shadow: 0 0 0 3px pink;
   }
@@ -49,7 +51,7 @@ const CheckboxContainer = styled.div`
   }
 `;
 
-const Checkbox = ({ name, color, checked, ...props }) => (
+const Checkbox = ({ title, name, color, checked, ...props }) => (
   <CheckboxContainer>
     <label>
       <HiddenCheckbox name={name} checked={checked} {...props} />
@@ -58,7 +60,7 @@ const Checkbox = ({ name, color, checked, ...props }) => (
           <polyline points="20 6 9 17 4 12" />
         </Icon>
       </StyledCheckbox>
-      <span>{name}</span>
+      <span>{title}</span>
     </label>
   </CheckboxContainer>
 );

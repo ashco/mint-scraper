@@ -12,7 +12,7 @@ import DataButton from './Buttons/DataButton';
 export default function Data() {
   const { scrapes } = useContext(ScrapeContext);
 
-  const [selectedData, setSelectedData] = useState({
+  const [accounts, setAccounts] = useState({
     cash: true,
     creditCard: true,
     loans: true,
@@ -21,7 +21,10 @@ export default function Data() {
   });
 
   const handleToggle = e => {
-    setSelectedData({ ...selectedData, [e.target.name]: e.target.checked });
+    setAccounts({
+      ...accounts,
+      [e.target.name]: e.target.checked,
+    });
   };
   // const cashObj = {
   //   data: 'cash',
@@ -51,41 +54,46 @@ export default function Data() {
 
   // const [targetData, setTargetData] = useState(cashObj);
 
-  useEffect(() => {
-    console.log(selectedData);
-  });
+  // useEffect(() => {
+  //   console.log(accounts);
+  // });
 
   return (
     <DataWrapper>
       <CheckboxWrapper>
         <Checkbox
+          title="Cash"
           name="cash"
           color="var(--mint-color)"
-          checked={selectedData.cash}
+          checked={accounts.cash}
           onChange={handleToggle}
         />
         <Checkbox
+          title="Credit Card"
           name="creditCard"
           color="var(--red-color)"
-          checked={selectedData.creditCard}
+          checked={accounts.creditCard}
           onChange={handleToggle}
         />
         <Checkbox
+          title="Loans"
           name="loans"
           color="var(--orange-color)"
-          checked={selectedData.loans}
+          checked={accounts.loans}
           onChange={handleToggle}
         />
         <Checkbox
+          title="Investments"
           name="investments"
           color="var(--blue-color)"
-          checked={selectedData.investments}
+          checked={accounts.investments}
           onChange={handleToggle}
         />
         <Checkbox
+          title="Property"
           name="property"
           color="var(--purple-color)"
-          checked={selectedData.property}
+          checked={accounts.property}
           onChange={handleToggle}
         />
       </CheckboxWrapper>
@@ -99,7 +107,7 @@ export default function Data() {
         /> */}
       </div>
       <TableWrapper>
-        {/* <Table title={targetData.title} scrapes={targetData.data} /> */}
+        <Table scrapes={scrapes} accounts={accounts} />
       </TableWrapper>
     </DataWrapper>
   );
