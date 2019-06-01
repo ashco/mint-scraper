@@ -13,13 +13,7 @@ const targetUrl =
 // Custom Hook!
 function useScrapes() {
   // Initial State inside hook
-  const [scrapes, setScrapes] = useState({
-    cashData: [],
-    creditCardData: [],
-    loanData: [],
-    investmentData: [],
-    propertyData: [],
-  });
+  const [scrapes, setScrapes] = useState([]);
   // fetch function
   async function fetchScrapes() {
     const res = await fetch(`${targetUrl}/data`);

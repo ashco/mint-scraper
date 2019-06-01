@@ -6,7 +6,6 @@ import formatCurrency from '../libs/formatCurrency';
 export default function Table({ scrapes, accounts }) {
   // const scrapesReversed = [...scrapes].reverse(); // prevents mutating data
 
-  console.log(scrapes);
   return (
     <TableStyle>
       <thead>

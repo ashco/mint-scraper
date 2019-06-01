@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const Scraper = require('./lib/scraper');
 const db = require('./lib/db');
 
-const { uniqueCount, formatData } = require('./lib/utils');
+const { uniqueCount, formatData, sortData } = require('./lib/utils');
 
 require('./lib/cron');
 
@@ -37,28 +37,33 @@ app.get('/scrape', async (req, res, next) => {
 });
 
 app.get('/data', async (req, res) => {
-  const {
-    cashData,
-    creditCardData,
-    loanData,
-    investmentData,
-    propertyData,
-  } = db.value();
+  // const {
+  //   cashData,
+  //   creditCardData,
+  //   loanData,
+  //   investmentData,
+  //   propertyData,
+  // } = db.value();
+  let data = db.value();
 
   // filter for only unique values
-  const uniqueCashData = uniqueCount(cashData);
-  const uniqueCreditCardData = uniqueCount(creditCardData);
-  const uniqueLoanData = uniqueCount(loanData);
-  const uniqueInvestmentData = uniqueCount(investmentData);
-  const uniquePropertyData = uniqueCount(propertyData);
+  // const uniqueCashData = uniqueCount(cashData);
+  // const uniqueCreditCardData = uniqueCount(creditCardData);
+  // const uniqueLoanData = uniqueCount(loanData);
+  // const uniqueInvestmentData = uniqueCount(investmentData);
+  // const uniquePropertyData = uniqueCount(propertyData);
 
-  const data = formatData({
-    cashData: uniqueCashData,
-    creditCardData: uniqueCreditCardData,
-    loanData: uniqueLoanData,
-    investmentData: uniqueInvestmentData,
-    propertyData: uniquePropertyData,
-  });
+  data = formatData(data);
+  data = uniqueCount(data);
+  console.log(data);
+  // const data = formatData({
+  //   cashData: uniqueCashData,
+  //   creditCardData: uniqueCreditCardData,
+  //   loanData: uniqueLoanData,
+  //   investmentData: uniqueInvestmentData,
+  //   propertyData: uniquePropertyData,
+  // });
+  // data = sortData(data);
 
   res.json(data);
 });

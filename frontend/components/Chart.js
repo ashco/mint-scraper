@@ -14,12 +14,14 @@ import formatCurrency from '../libs/formatCurrency';
 
 export default class Chart extends PureComponent {
   render() {
-    const { data, color } = this.props;
+    const { scrapes, accounts } = this.props;
     const scrapesWithDates = scrapes.map(scrape => ({
       ...scrape,
       date: distanceInWords(new Date(scrape.date), new Date()),
     }));
 
+    // console.log(scrapesWithDates);
+    // return 'working on it';
     return (
       <LineChart
         data={scrapesWithDates}
@@ -41,8 +43,8 @@ export default class Chart extends PureComponent {
         <Tooltip formatter={(value, name, props) => [formatCurrency(value)]} />
         <Line
           type="monotone"
-          dataKey="data.total"
-          stroke={color}
+          dataKey="totalCash"
+          // stroke={color}
           activeDot={{ r: 8 }}
         />
       </LineChart>

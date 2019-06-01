@@ -99,12 +99,13 @@ export default function Data() {
       </CheckboxWrapper>
 
       <div>
-        {/* <OverviewChart scrapes={scrapes} /> */}
-        {/* <Chart
-          title={targetData.title}
-          color={targetData.color}
-          data={targetData.data}
-        /> */}
+        <Chart
+          scrapes={scrapes}
+          accounts={accounts}
+          // title={targetData.title}
+          // color={targetData.color}
+          // data={targetData.data}
+        />
       </div>
       <TableWrapper>
         <Table scrapes={scrapes} accounts={accounts} />

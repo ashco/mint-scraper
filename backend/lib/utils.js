@@ -1,63 +1,77 @@
-﻿function uniqueCount(scrapes) {
-  return scrapes.filter((item, i, arr) => {
-    if (i === 0) return true; // keep it, its the first one
-    const lastItem = arr[i - 1];
-    return !(item.data.total === lastItem.data.total);
-  });
-}
+﻿/**
+ * Formats data to simplified array of objects.
+ * @param {Object} data - object of saved database.
+ * @returns {Object} formattedData - [{
+  * date,
+    totalCash,
+    totalCreditCard,
+    totalLoans,
+    totalInvestments,
+    totalProperty,
+ * }]
+ */
 
-function formatData({
-  cashData,
-  creditCardData,
-  loanData,
-  investmentData,
-  propertyData,
-}) {
-  const accounts = [
-    cashData,
-    creditCardData,
-    loanData,
-    investmentData,
-    propertyData,
-  ];
+function formatData(data) {
+  const accounts = {
+    totalCash: data.cashData,
+    totalCreditCard: data.creditCardData,
+    totalLoans: data.loanData,
+    totalInvestments: data.investmentData,
+    totalProperty: data.propertyData,
+  };
 
-  const key = [
-    'totalCash',
-    'totalCreditCard',
-    'totalLoans',
-    'totalInvestments',
-    'totalProperty',
-  ];
-
-  const data = [];
+  const formattedData = [{}];
 
   // create all objects with timestamps.
-  accounts.forEach(account => {
-    account.forEach(scrape => {
-      data.push({
-        date: scrape.date,
-        totalCash: null,
-        totalCreditCard: null,
-        totalLoans: null,
-        totalInvestments: null,
-        totalProperty: null,
-      });
+  Object.values(accounts).forEach((account, i) => {
+    account.forEach((scrape, j) => {
+      const key = Object.keys(accounts)[i];
+      const value = scrape.data.total;
+
+      if (i === 0) {
+        formattedData.push({
+          date: scrape.date,
+          cashData: null,
+          creditCardData: null,
+          loanData: null,
+          investmentData: null,
+          propertyData: null,
+        });
+      }
+      formattedData[j][key] = [value];
     });
   });
 
-  // go through each account and place data in appropriate object spot
-  accounts.forEach((account, i) => {
-    account.forEach(scrape => {
-      const { date } = scrape;
-      const { total } = scrape.data;
+  return formattedData;
+}
 
-      // find data index of object with same date.
-      const index = data.findIndex(obj => obj.date === date);
-      // add total number to data index object's totalCash section
-      data[index][key[i]] = total;
-    });
+/**
+ * Filters filtered data into
+ * @param {Object} data - object of saved database.
+ */
+function uniqueCount(data) {
+  const uniqueData = data.filter((item, i, arr) => {
+    if (i === 0) return true; // keep it, its the first one
+    const lastItem = arr[i - 1];
+
+    return !(
+      item.totalCash === lastItem.totalCash &&
+      item.totalCreditCard === lastItem.totalCreditCard &&
+      item.totalLoans === lastItem.totalLoans &&
+      item.totalInvestments === lastItem.totalInvestments &&
+      item.totalProperty === lastItem.totalProperty
+    );
   });
-  return data;
+
+  return uniqueData;
+}
+
+/**
+ * sort array from oldest to newest
+ * @param {Object} data - object of saved database.
+ */
+function sortData(data) {
+  data.sort((a, b) => a.date - b.date);
 }
 
 // Want to format data like..
@@ -72,4 +86,4 @@ function formatData({
 //   },
 // ];
 
-module.exports = { uniqueCount, formatData };
+module.exports = { uniqueCount, formatData, sortData };
