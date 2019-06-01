@@ -31,18 +31,26 @@ function formatData(data) {
       if (i === 0) {
         formattedData.push({
           date: scrape.date,
-          cashData: null,
-          creditCardData: null,
-          loanData: null,
-          investmentData: null,
-          propertyData: null,
         });
       }
-      formattedData[j][key] = [value];
+      formattedData[j][key] = value;
     });
   });
 
   return formattedData;
+}
+
+function addNetWorthData(data) {
+  data.forEach(scrape => {
+    const netWorth =
+      scrape.totalCash +
+      scrape.totalCreditCard +
+      scrape.totalLoans +
+      scrape.totalInvestments +
+      scrape.totalProperty;
+
+    scrape.totalNetWorth = netWorth;
+  });
 }
 
 /**
@@ -66,24 +74,4 @@ function uniqueCount(data) {
   return uniqueData;
 }
 
-/**
- * sort array from oldest to newest
- * @param {Object} data - object of saved database.
- */
-function sortData(data) {
-  data.sort((a, b) => a.date - b.date);
-}
-
-// Want to format data like..
-// const data = [
-//   {
-//     date: 12345678,
-//     totalCash: 19762.39,
-//     totalCreditCard: 197162.39,
-//     totalLoans: 1972.39,
-//     totalInvestments: 119762.39,
-//     totalProperty: 1762.39,
-//   },
-// ];
-
-module.exports = { uniqueCount, formatData, sortData };
+module.exports = { uniqueCount, addNetWorthData, formatData };

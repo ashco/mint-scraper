@@ -32,7 +32,7 @@ const StyledCheckbox = styled.div`
     cursor: pointer;
   }
   ${HiddenCheckbox}:focus + & {
-    box-shadow: 0 0 0 3px pink;
+    box-shadow: 0 0 0 3px ${props => props.color};
   }
 
   ${Icon} {
@@ -48,6 +48,9 @@ const CheckboxContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+  span {
+    margin-top: 4px;
   }
 `;
 

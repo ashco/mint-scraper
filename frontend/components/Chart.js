@@ -2,7 +2,9 @@
 import {
   LineChart,
   ResponsiveContainer,
+  AreaChart,
   Line,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -20,8 +22,6 @@ export default class Chart extends PureComponent {
       date: distanceInWords(new Date(scrape.date), new Date()),
     }));
 
-    // console.log(scrapesWithDates);
-    // return 'working on it';
     return (
       <LineChart
         data={scrapesWithDates}
@@ -39,12 +39,72 @@ export default class Chart extends PureComponent {
         <YAxis
           tickFormatter={(value, name, props) => [formatCurrency(value)]}
           width={90}
+          domain={[
+            // dataMin => dataMin - Math.abs(dataMin) * 0.1,
+            // dataMax => dataMax + Math.abs(dataMax) * 0.1,
+            'auto',
+            'auto',
+          ]}
         />
-        <Tooltip formatter={(value, name, props) => [formatCurrency(value)]} />
+        <Tooltip
+          formatter={(value, name, props) => [formatCurrency(value), name]}
+        />
+        {accounts.cash && (
+          <Line
+            type="monotone"
+            dataKey="totalCash"
+            stackId="1"
+            stroke="var(--mint-color)"
+            // fill="var(--mint-color)"
+            activeDot={{ r: 8 }}
+          />
+        )}
+        {accounts.creditCard && (
+          <Line
+            type="monotone"
+            dataKey="totalCreditCard"
+            stackId="1"
+            stroke="var(--red-color)"
+            // fill="var(--red-color)"
+            activeDot={{ r: 8 }}
+          />
+        )}
+        {accounts.loans && (
+          <Line
+            type="monotone"
+            dataKey="totalLoans"
+            stackId="1"
+            stroke="var(--orange-color)"
+            // fill="var(--orange-color)"
+            activeDot={{ r: 8 }}
+          />
+        )}
+        {accounts.investments && (
+          <Line
+            type="monotone"
+            dataKey="totalInvestments"
+            stackId="1"
+            stroke="var(--blue-color)"
+            // fill="var(--blue-color)"
+            activeDot={{ r: 8 }}
+          />
+        )}
+        {accounts.property && (
+          <Line
+            type="monotone"
+            dataKey="totalProperty"
+            stackId="1"
+            stroke="var(--purple-color)"
+            // fill="var(--purple-color)"
+            activeDot={{ r: 8 }}
+          />
+        )}
         <Line
           type="monotone"
-          dataKey="totalCash"
-          // stroke={color}
+          dataKey="totalNetWorth"
+          stackId="1"
+          stroke="#000"
+          // fill="var(--purple-color)"
           activeDot={{ r: 8 }}
         />
       </LineChart>

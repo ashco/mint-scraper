@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const Scraper = require('./lib/scraper');
 const db = require('./lib/db');
 
-const { uniqueCount, formatData, sortData } = require('./lib/utils');
+const { uniqueCount, addNetWorthData, formatData } = require('./lib/utils');
 
 require('./lib/cron');
 
@@ -54,8 +54,8 @@ app.get('/data', async (req, res) => {
   // const uniquePropertyData = uniqueCount(propertyData);
 
   data = formatData(data);
+  addNetWorthData(data);
   data = uniqueCount(data);
-  console.log(data);
   // const data = formatData({
   //   cashData: uniqueCashData,
   //   creditCardData: uniqueCreditCardData,
@@ -63,7 +63,6 @@ app.get('/data', async (req, res) => {
   //   investmentData: uniqueInvestmentData,
   //   propertyData: uniquePropertyData,
   // });
-  // data = sortData(data);
 
   res.json(data);
 });
