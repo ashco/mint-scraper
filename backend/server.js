@@ -44,7 +44,7 @@ app.get('/scrape', async (req, res, next) => {
 app.get('/data', async (req, res) => {
   let data = db.value();
 
-  if (!data) {
+  if (Object.keys(data).length < 1) {
     res.json('No data!');
     return;
   }
