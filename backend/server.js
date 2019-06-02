@@ -45,15 +45,12 @@ app.get('/data', async (req, res) => {
   console.log('Data requested.');
   let data = db.value();
 
-  if (Object.keys(data).length < 1) {
-    res.json('No data!');
-    return;
+  if (Object.keys(data).length > 0) {
+    data = formatData(data);
+    addNetWorthData(data);
+    data = filterIncomplete(data);
+    data = uniqueCount(data);
   }
-
-  data = formatData(data);
-  addNetWorthData(data);
-  data = filterIncomplete(data);
-  data = uniqueCount(data);
 
   res.json(data);
 });

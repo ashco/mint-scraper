@@ -11,7 +11,6 @@ import DataButton from './Buttons/DataButton';
 
 export default function Data() {
   const { scrapes } = useContext(ScrapeContext);
-
   const [accounts, setAccounts] = useState({
     cash: true,
     creditCard: true,
@@ -67,12 +66,14 @@ export default function Data() {
         />
       </CheckboxWrapper>
 
-      <div>
-        <Chart scrapes={scrapes} accounts={accounts} />
-      </div>
-      <TableWrapper>
-        <Table scrapes={scrapes} accounts={accounts} />
-      </TableWrapper>
+      {scrapes.length > 0 ? (
+        <div>
+          <Chart scrapes={scrapes} accounts={accounts} />
+          <Table scrapes={scrapes} accounts={accounts} />
+        </div>
+      ) : (
+        <div>Get da money!</div>
+      )}
     </DataWrapper>
   );
 }
@@ -87,8 +88,4 @@ const CheckboxWrapper = styled.div`
   padding: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-`;
-
-const TableWrapper = styled.div`
-  margin: 20px auto 40px;
 `;

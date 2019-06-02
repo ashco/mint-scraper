@@ -16,7 +16,7 @@
   "scripts": {
     "dev": "next dev -p 4000",
     "build": "next build",
-    "start": "next -p 4000"
+    "start": "NODE_ENV=production next -p 4000"
   },
   "devDependencies": {
     "babel-plugin-styled-components": "^1.10.0"
