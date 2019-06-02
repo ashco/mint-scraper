@@ -70,7 +70,7 @@ export default class Chart extends PureComponent {
           </linearGradient>
         </defs>
         <XAxis dataKey="date" />
-        <YAxis />
+        <YAxis tickFormatter={value => [formatCurrency(value)]} width={90} />
         <Tooltip
           formatter={(value, name, props) => [formatCurrency(value), name]}
         />

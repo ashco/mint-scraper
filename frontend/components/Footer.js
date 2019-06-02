@@ -5,15 +5,14 @@ import TimestampText from './TimestampText';
 
 const Footer = () => (
   <FooterStyle>
-    <div />
     <TimestampText />
-    <SettingsButton />
+    {/* <SettingsButton /> */}
   </FooterStyle>
 );
 
 const FooterStyle = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   background: var(--mint-color);
 `;
