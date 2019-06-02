@@ -28,6 +28,7 @@ function formatData(data) {
       // if date is not currently in formattedData object, create empty object
       if (formattedData[roundedDate] === undefined) {
         formattedData[roundedDate] = {
+          date: roundedDate,
           totalCash: null,
           totalCreditCard: null,
           totalLoans: null,

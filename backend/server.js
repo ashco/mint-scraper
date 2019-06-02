@@ -42,63 +42,15 @@ app.get('/scrape', async (req, res, next) => {
 });
 
 app.get('/data', async (req, res) => {
-  // const {
-  //   cashData,
-  //   creditCardData,
-  //   loanData,
-  //   investmentData,
-  //   propertyData,
-  // } = db.value();
   let data = db.value();
-
-  // filter for only unique values
-  // const uniqueCashData = uniqueCount(cashData);
-  // const uniqueCreditCardData = uniqueCount(creditCardData);
-  // const uniqueLoanData = uniqueCount(loanData);
-  // const uniqueInvestmentData = uniqueCount(investmentData);
-  // const uniquePropertyData = uniqueCount(propertyData);
 
   data = formatData(data);
   addNetWorthData(data);
   data = filterIncomplete(data);
   data = uniqueCount(data);
-  console.log(data);
-  // const data = formatData({
-  //   cashData: uniqueCashData,
-  //   creditCardData: uniqueCreditCardData,
-  //   loanData: uniqueLoanData,
-  //   investmentData: uniqueInvestmentData,
-  //   propertyData: uniquePropertyData,
-  // });
 
   res.json(data);
 });
-
-// app.get('/data-format', async (req, res) => {
-//   const {
-//     cashData,
-//     creditCardData,
-//     loanData,
-//     investmentData,
-//     propertyData,
-//   } = db.value();
-
-//   const uniqueCashData = uniqueCount(cashData);
-//   const uniqueCreditCardData = uniqueCount(creditCardData);
-//   const uniqueLoanData = uniqueCount(loanData);
-//   const uniqueInvestmentData = uniqueCount(investmentData);
-//   const uniquePropertyData = uniqueCount(propertyData);
-
-//   const data = formatData({
-//     cashData: uniqueCashData,
-//     creditCardData: uniqueCreditCardData,
-//     loanData: uniqueLoanData,
-//     investmentData: uniqueInvestmentData,
-//     propertyData: uniquePropertyData,
-//   });
-
-//   res.json(data);
-// });
 
 app.post('/auth-req', async (req, res, next) => {
   console.log('Auth initializing.');

@@ -47,10 +47,11 @@ export default function Table({ scrapes, accounts }) {
 
 const TableStyle = styled.table`
   font-size: 18px;
-  width: 360px;
+  width: auto;
+  text-align: center;
   td {
-    width: 140px;
-    padding: 4px 8px;
+    width: auto;
+    padding: 6px 14px;
   }
   thead {
     td {
