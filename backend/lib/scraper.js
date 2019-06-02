@@ -245,19 +245,17 @@ class Scraper {
   }
 
   async runCron() {
-    let cashData;
-    let creditCardData;
-    let loanData;
-    let investmentData;
-    let propertyData;
-
     await this.scrape()
       .then(res => {
-        cashData = res.cashData;
-        creditCardData = res.creditCardData;
-        loanData = res.loanData;
-        investmentData = res.investmentData;
-        propertyData = res.propertyData;
+        console.log(res);
+
+        const {
+          cashData,
+          creditCardData,
+          loanData,
+          investmentData,
+          propertyData,
+        } = res;
 
         db.get('cashData')
           .push({

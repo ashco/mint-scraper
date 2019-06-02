@@ -4,6 +4,12 @@ const FileSync = require('lowdb/adapters/FileSync');
 
 const adapter = new FileSync('db.json');
 const db = low(adapter);
-db.defaults([]).write();
+db.defaults({
+  cashData: [],
+  creditCardData: [],
+  loanData: [],
+  investmentData: [],
+  propertyData: [],
+}).write();
 
 module.exports = db;

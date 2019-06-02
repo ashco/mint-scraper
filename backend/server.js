@@ -42,7 +42,7 @@ app.get('/scrape', async (req, res, next) => {
 });
 
 app.get('/data', async (req, res) => {
-  console.log('Data requested.');
+  console.log('Stored data requested.');
   let data = db.value();
 
   if (Object.keys(data).length > 0) {
@@ -56,7 +56,7 @@ app.get('/data', async (req, res) => {
 });
 
 app.post('/auth-req', async (req, res, next) => {
-  console.log('Auth requested.');
+  console.log('Authentication request sent.');
 
   try {
     const globalPackage = await scraper.init();
@@ -72,7 +72,7 @@ app.post('/auth-req', async (req, res, next) => {
 });
 
 app.post('/auth-send', async (req, res) => {
-  console.log('Auth code sent.');
+  console.log('Authentication verification code sent.');
   const { authCode } = req.body;
 
   try {

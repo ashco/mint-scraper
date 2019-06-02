@@ -9,8 +9,6 @@ const TimestampText = () => {
 
   let timestamp = false;
 
-  console.log(scrapes.length);
-
   if (scrapes.length > 0) {
     const latestDate = scrapes.reduce(
       (acc, cur) => (acc < cur.date ? cur.date : acc),
