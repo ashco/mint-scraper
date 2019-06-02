@@ -1,14 +1,6 @@
 ﻿/**
  * Formats data to simplified array of objects.
  * @param {Object} data - object of saved database.
- * @returns {Object} formattedData - [{
-  * date,
-    totalCash,
-    totalCreditCard,
-    totalLoans,
-    totalInvestments,
-    totalProperty,
- * }]
  */
 
 function formatData(data) {
@@ -20,20 +12,30 @@ function formatData(data) {
     totalProperty: data.propertyData,
   };
 
-  const formattedData = [{}];
+  // const formattedData = [{}];
+  const formattedData = {};
 
   // create all objects with timestamps.
   Object.values(accounts).forEach((account, i) => {
+    console.log(account.length);
     account.forEach((scrape, j) => {
       const key = Object.keys(accounts)[i];
       const value = scrape.data.total;
 
-      if (i === 0) {
-        formattedData.push({
-          date: scrape.date,
-        });
+      // look up scrapes date
+      const { date } = scrape;
+      const roundedDate = date - (date % 1000);
+      // if date is not currently in formattedData object, create empty object
+      if (formattedData[roundedDate] === undefined) {
+        formattedData[roundedDate] = {
+          totalCash: null,
+          totalCreditCard: null,
+          totalLoans: null,
+          totalInvestments: null,
+          totalProperty: null,
+        };
       }
-      formattedData[j][key] = value;
+      formattedData[roundedDate][key] = value;
     });
   });
 
@@ -41,16 +43,27 @@ function formatData(data) {
 }
 
 function addNetWorthData(data) {
-  data.forEach(scrape => {
-    const netWorth =
+  Object.values(data).forEach(scrape => {
+    let netWorth =
       scrape.totalCash +
       scrape.totalCreditCard +
       scrape.totalLoans +
       scrape.totalInvestments +
       scrape.totalProperty;
 
+    // fix javascript math issues
+    netWorth = Math.round(netWorth * 100) / 100;
+
     scrape.totalNetWorth = netWorth;
   });
+}
+
+function filterIncomplete(data) {
+  const filteredData = Object.values(data).filter(scrape =>
+    Object.values(scrape).every(total => total !== null)
+  );
+
+  return filteredData;
 }
 
 /**
@@ -58,20 +71,14 @@ function addNetWorthData(data) {
  * @param {Object} data - object of saved database.
  */
 function uniqueCount(data) {
-  const uniqueData = data.filter((item, i, arr) => {
+  const uniqueData = Object.values(data).filter((item, i, arr) => {
     if (i === 0) return true; // keep it, its the first one
     const lastItem = arr[i - 1];
 
-    return !(
-      item.totalCash === lastItem.totalCash &&
-      item.totalCreditCard === lastItem.totalCreditCard &&
-      item.totalLoans === lastItem.totalLoans &&
-      item.totalInvestments === lastItem.totalInvestments &&
-      item.totalProperty === lastItem.totalProperty
-    );
+    return !(item.totalNetWorth === lastItem.totalNetWorth);
   });
 
   return uniqueData;
 }
 
-module.exports = { uniqueCount, addNetWorthData, formatData };
+module.exports = { uniqueCount, addNetWorthData, filterIncomplete, formatData };

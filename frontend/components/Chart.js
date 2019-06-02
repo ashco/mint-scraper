@@ -22,6 +22,7 @@ export default class Chart extends PureComponent {
       date: distanceInWords(new Date(scrape.date), new Date()),
     }));
 
+    console.log(scrapes);
     console.log(scrapesWithDates);
 
     return (

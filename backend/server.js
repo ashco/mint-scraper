@@ -7,7 +7,12 @@ const bodyParser = require('body-parser');
 const Scraper = require('./lib/scraper');
 const db = require('./lib/db');
 
-const { uniqueCount, addNetWorthData, formatData } = require('./lib/utils');
+const {
+  uniqueCount,
+  addNetWorthData,
+  filterIncomplete,
+  formatData,
+} = require('./lib/utils');
 
 require('./lib/cron');
 
@@ -55,7 +60,9 @@ app.get('/data', async (req, res) => {
 
   data = formatData(data);
   addNetWorthData(data);
+  data = filterIncomplete(data);
   data = uniqueCount(data);
+  console.log(data);
   // const data = formatData({
   //   cashData: uniqueCashData,
   //   creditCardData: uniqueCreditCardData,
