@@ -7,9 +7,9 @@ import PhoneIcon from '../Icons/Phone';
 const targetIp = '192.168.86.72';
 const port = 4001;
 const targetUrl =
-  process.env.NODE_ENV === 'production'
-    ? `http://${targetIp}:${port}`
-    : `http://localhost:${port}`;
+  // process.env.NODE_ENV === 'production'
+  `http://${targetIp}:${port}`;
+// : `http://localhost:${port}`;
 
 export default class AuthButton extends React.Component {
   async handleClick() {
