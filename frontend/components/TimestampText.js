@@ -1,4 +1,4 @@
-﻿import React, { useContext, useState, useEffect } from 'react';
+﻿import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { distanceInWords } from 'date-fns';
 
@@ -8,7 +8,9 @@ const TimestampText = () => {
   const { scrapes } = useContext(ScrapeContext);
 
   let timestamp = false;
-  // This is disgusting, but works for now..
+
+  console.log(scrapes.length);
+
   if (scrapes.length > 0) {
     const latestDate = scrapes.reduce(
       (acc, cur) => (acc < cur.date ? cur.date : acc),
