@@ -46,6 +46,7 @@ app.get('/data', async (req, res) => {
 
   if (!data) {
     res.json('No data!');
+    return;
   }
 
   data = formatData(data);
