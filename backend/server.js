@@ -44,6 +44,10 @@ app.get('/scrape', async (req, res, next) => {
 app.get('/data', async (req, res) => {
   let data = db.value();
 
+  if (!data) {
+    res.json('No data!');
+  }
+
   data = formatData(data);
   addNetWorthData(data);
   data = filterIncomplete(data);

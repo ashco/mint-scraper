@@ -17,7 +17,6 @@ function formatData(data) {
 
   // create all objects with timestamps.
   Object.values(accounts).forEach((account, i) => {
-    console.log(account.length);
     account.forEach((scrape, j) => {
       const key = Object.keys(accounts)[i];
       const value = scrape.data.total;

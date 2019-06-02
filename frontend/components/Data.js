@@ -26,37 +26,6 @@ export default function Data() {
       [e.target.name]: e.target.checked,
     });
   };
-  // const cashObj = {
-  //   data: 'cash',
-  //   title: 'Cash',
-  //   color: 'var(--mint-color)',
-  // };
-  // const creditCardObj = {
-  //   // data: scrapes.totalCreditCard,
-  //   title: 'Credit Card',
-  //   color: 'var(--red-color)',
-  // };
-  // const loanObj = {
-  //   // data: scrapes.totalLoans,
-  //   title: 'Loans',
-  //   color: 'var(--orange-color)',
-  // };
-  // const investmentObj = {
-  //   // data: scrapes.totalInvestments,
-  //   title: 'Investments',
-  //   color: 'var(--blue-color)',
-  // };
-  // const propertyObj = {
-  //   // data: scrapes.totalProperty,
-  //   title: 'Property',
-  //   color: 'var(--purple-color)',
-  // };
-
-  // const [targetData, setTargetData] = useState(cashObj);
-
-  // useEffect(() => {
-  //   console.log(accounts);
-  // });
 
   return (
     <DataWrapper>
@@ -99,13 +68,7 @@ export default function Data() {
       </CheckboxWrapper>
 
       <div>
-        <Chart
-          scrapes={scrapes}
-          accounts={accounts}
-          // title={targetData.title}
-          // color={targetData.color}
-          // data={targetData.data}
-        />
+        <Chart scrapes={scrapes} accounts={accounts} />
       </div>
       <TableWrapper>
         <Table scrapes={scrapes} accounts={accounts} />
