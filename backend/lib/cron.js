@@ -6,5 +6,5 @@ cron.schedule(process.env.CRON, async () => {
   console.log('⏲️ RUNNING THE CRON');
 
   const scraper = new Scraper();
-  scraper.runCron();
+  scraper.scrapeAndSave();
 });

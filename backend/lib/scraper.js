@@ -229,7 +229,7 @@ class Scraper {
           this.scrapePropertyData(page),
         ]);
 
-        console.log('Data Scraped!');
+        console.log('Data Scrape Successful!');
         resolve({
           cashData,
           creditCardData,
@@ -244,11 +244,9 @@ class Scraper {
     });
   }
 
-  async runCron() {
+  async scrapeAndSave() {
     await this.scrape()
       .then(res => {
-        console.log(res);
-
         const {
           cashData,
           creditCardData,
@@ -292,6 +290,8 @@ class Scraper {
             data: propertyData,
           })
           .write();
+
+        console.log('Data saved!');
       })
       .catch(err => {
         console.error(err);

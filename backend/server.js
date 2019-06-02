@@ -29,11 +29,12 @@ const scraper = new Scraper();
 let globalPage;
 let globalBrowser;
 
+/**
+ * Route to request data scrape and save data to database.
+ */
 app.get('/scrape', async (req, res, next) => {
-  console.log('Scraping!!');
-
   try {
-    await scraper.runCron();
+    await scraper.scrapeAndSave();
     res.status(200).send('Fresh data scraped!');
   } catch (err) {
     console.error(err.message);
@@ -41,8 +42,10 @@ app.get('/scrape', async (req, res, next) => {
   }
 });
 
+/**
+ * Route to get scrape data loaded in database
+ */
 app.get('/data', async (req, res) => {
-  console.log('Stored data requested.');
   let data = db.value();
 
   if (Object.keys(data).length > 0) {
@@ -55,6 +58,9 @@ app.get('/data', async (req, res) => {
   res.json(data);
 });
 
+/**
+ * Route to initialize auth request, will send SMS to phone
+ */
 app.post('/auth-req', async (req, res, next) => {
   console.log('Authentication request sent.');
 
@@ -71,13 +77,19 @@ app.post('/auth-req', async (req, res, next) => {
   }
 });
 
+/**
+ * Route to provide auth code. Also runs scraper function.
+ */
 app.post('/auth-send', async (req, res) => {
   console.log('Authentication verification code sent.');
   const { authCode } = req.body;
 
   try {
     await scraper.authSend(globalPage, authCode);
-    res.status(200).send('SUCCESS! Your auth request went swimmingly.');
+    await scraper.scrapeAndSave();
+    res
+      .status(200)
+      .send('SUCCESS! You have been authenticated and data has been scraped.');
   } catch (err) {
     console.error(err.message);
     res.status(500).send(err.message);

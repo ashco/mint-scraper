@@ -14,7 +14,8 @@ const PrimaryButtonStyle = styled.button`
     color: var(--bg-color);
     height: 100%;
     &:active {
-      color: #fff;
+      /* color: #fff; */
+      transform: scale(0.9);
     }
   }
 `;
