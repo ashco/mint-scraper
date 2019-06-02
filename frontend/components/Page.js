@@ -5,6 +5,7 @@ import { ScrapeProvider } from './ScrapeContext';
 
 const targetIp = '192.168.86.72';
 const port = 4001;
+console.log(process.env.NODE_ENV);
 const targetUrl =
   process.env.NODE_ENV === 'production'
     ? `http://${targetIp}:${port}`
